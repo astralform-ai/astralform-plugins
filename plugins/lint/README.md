@@ -1,4 +1,4 @@
-# Claude Code Lint Plugin
+# Lint Plugin
 
 Automatically runs linters after code modifications and provides feedback. Supports JavaScript/TypeScript, Python, Swift, and Kotlin.
 
@@ -12,19 +12,10 @@ Automatically runs linters after code modifications and provides feedback. Suppo
 
 ## Installation
 
-### From custom marketplace
+Install from the atom2ueki-plugins marketplace:
 ```bash
-/plugin marketplace add /Users/atom2ueki/Documents/atom2ueki/atom2ueki-plugins
-/plugin install lint@atom2ueki-plugins
-```
-
-### Local development/testing
-```bash
-# From atom2ueki-plugins directory
-claude --plugin-dir ./plugins/lint
-
-# From code-lint directory (if testing old structure)
-claude --plugin-dir ./claude-code-lint-plugin
+/plugin marketplace add https://github.com/atom2ueki/atom2ueki-plugins
+/plugin install lint
 ```
 
 ## How it works
@@ -77,11 +68,9 @@ The plugin automatically detects your project's linter configuration. Ensure you
 4. If auto-fix fails, Claude uses lint-fixer skill to guide manual fixes
 5. Run `/lint:check` to verify all fixes
 
-## Development
-
-### Plugin structure
+## Plugin Structure
 ```
-plugins/lint/
+lint/
 ├── .claude-plugin/
 │   └── plugin.json              # Plugin manifest
 ├── hooks/
@@ -95,45 +84,8 @@ plugins/lint/
     └── lint.md                 # Manual lint command
 ```
 
-### Testing locally
-```bash
-# Start Claude Code with the plugin (from atom2ueki-plugins directory)
-claude --plugin-dir ./plugins/lint
-
-# Or from old structure (from code-lint directory)
-claude --plugin-dir ./claude-code-lint-plugin
-
-# Test the plugin
-/lint:check
-```
-
-### Debugging
-```bash
-# Enable debug mode to see hook execution
-claude --debug --plugin-dir ./plugins/lint
-```
-
 ## Requirements
 
 - Claude Code 1.0.33 or later
 - Supported languages: Python 3.8+, Node.js 14+, Swift 5.3+, Kotlin 1.5+
 - Linters must be installed in the project or globally
-
-## Limitations
-
-- Only supports the four major languages listed
-- Requires linters to be installed and configured
-- Auto-fix may not resolve all issues
-- Complex projects may need custom configuration
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make changes
-4. Test with `claude --plugin-dir ./plugins/lint` (from atom2ueki-plugins directory)
-5. Submit a pull request
-
-## License
-
-MIT
