@@ -25,7 +25,7 @@ def parse_input() -> Dict:
 def load_linters_config() -> Dict:
     """Load linters.json from plugin directory."""
     plugin_root = os.path.expanduser(os.environ.get("CLAUDE_PLUGIN_ROOT", ""))
-    config_path = os.path.join(plugin_root, "linters.json")
+    config_path = os.path.join(plugin_root, "scripts", "linters.json")
 
     try:
         with open(config_path, "r") as f:
