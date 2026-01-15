@@ -18,9 +18,23 @@ This is a personal plugin marketplace for Claude that provides specialized tools
 
 ## Setup
 
-1. Add this marketplace URL to your Claude plugin settings
-2. Enable desired plugins
-3. Use plugins during development sessions
+Add the marketplace using one of these methods:
+
+```bash
+# Using GitHub shorthand
+/plugin marketplace add atom2ueki/atom2ueki-plugins
+
+# Using GitHub URL
+/plugin marketplace add https://github.com/atom2ueki/atom2ueki-plugins
+
+# Using local path (if cloned)
+/plugin marketplace add /path/to/atom2ueki-plugins  # Ensure .claude-plugin/marketplace.json exists
+```
+
+Then install plugins:
+```bash
+/plugin install lint
+```
 
 ## Usage
 
