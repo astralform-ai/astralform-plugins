@@ -27,9 +27,9 @@ Install from the astralform-plugins marketplace:
 ### Automatic lint hooks
 When you edit or create files using Claude Code, the plugin automatically:
 
-1. Detects the file type (`.js`, `.ts`, `.py`, `.swift`, `.kt`, `.go`, `.rs`, `.cpp`, `.rb`, `.php`)
-2. Checks for configured linters in the project
-3. Verifies linter binaries are available
+1. Detects the file type (`.js`, `.jsx`, `.ts`, `.tsx`, `.py`, `.pyi`, `.swift`, `.kt`, `.kts`, `.go`, `.rs`, `.cpp`, `.cc`, `.cxx`, `.h`, `.hpp`, `.rb`, `.php`)
+2. Scans project root for linter configuration files
+3. Verifies linter binaries are available on your system
 4. Blocks with install commands if required linters are missing
 5. Runs appropriate linters with auto-fix options
 6. Reports any remaining issues to Claude
@@ -38,15 +38,15 @@ When you edit or create files using Claude Code, the plugin automatically:
 
 | Language | Linters | Configuration files |
 |----------|---------|---------------------|
-| JavaScript/TypeScript | ESLint, Prettier, TypeScript | `package.json`, `.eslintrc`, `.prettierrc`, `tsconfig.json` |
-| Python | Ruff, Black, isort, mypy | `pyproject.toml`, `setup.cfg`, `requirements.txt` |
-| Swift | SwiftLint, SwiftFormat | `.swiftlint.yml`, `Package.swift`, `.swiftformat` |
-| Kotlin | ktlint, Detekt | `build.gradle`, `build.gradle.kts`, `detekt.yml` |
-| Go | golangci-lint | `.golangci.yml`, `.golangci.yaml` |
-| Rust | Clippy, rustfmt | `Cargo.toml`, `.clippy.toml` |
-| C/C++ | clang-tidy | `.clang-tidy`, `.clangd` |
-| Ruby | RuboCop | `.rubocop.yml`, `.rubocop.yaml` |
-| PHP | PHP_CodeSniffer | `phpcs.xml`, `.phpcs.xml` |
+| JavaScript/TypeScript | ESLint, Prettier, TypeScript | `.eslintrc*`, `.prettierrc*`, `tsconfig.json`, `package.json` |
+| Python | Ruff, Black, isort, mypy | `pyproject.toml`, `ruff.toml`, `setup.cfg`, `.isort.cfg`, `mypy.ini` |
+| Swift | SwiftLint, SwiftFormat | `.swiftlint.yml`, `.swiftformat` |
+| Kotlin | ktlint, Detekt | `.editorconfig`, `build.gradle*`, `detekt.yml`, `.detekt/config.yml` |
+| Go | golangci-lint | `.golangci.yml`, `.golangci.yaml`, `.golangci-lint.yml` |
+| Rust | Clippy, rustfmt | `Cargo.toml`, `.clippy.toml`, `rustfmt.toml` |
+| C/C++ | clang-tidy | `.clang-tidy` |
+| Ruby | RuboCop | `.rubocop*`, `.rubocop-todo.yml` |
+| PHP | PHP_CodeSniffer | `phpcs.xml`, `.phpcs.xml`, `phpcs.ruleset.xml`, `php-ruleset.xml` |
 
 ### Auto-fix behavior
 
@@ -94,10 +94,10 @@ When auto-fix fails or for linters without auto-fix, Claude will use the `lint-f
 
 ## Configuration
 
-The plugin automatically detects your project's linter configuration. Ensure you have:
+The plugin automatically detects your project's linter configuration by scanning for configuration files at the project root. Ensure you have:
 
 1. **Linters installed** (e.g., `npm install -g eslint prettier`, `pip install ruff black`)
-2. **Configuration files** (e.g., `.eslintrc.json`, `pyproject.toml`)
+2. **Configuration files** in your project root (see table above for each language's supported files)
 3. **Project structure** with standard layout
 
 ## Example workflow
