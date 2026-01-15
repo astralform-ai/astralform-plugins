@@ -178,10 +178,9 @@ def run_linter_dynamic(linter_config: Dict, file_path: str) -> Tuple[bool, str]:
         command_str = command_template.format(gradle=gradle_cmd, file=file_path)
         cmd = command_str.split()
     elif "npx" in linter_config:
-        # Use npx for Node.js tools
-        binary = linter_config["npx"]
-        args = linter_config["command"].replace(f"{binary} ", "").format(file=file_path)
-        cmd = ["npx"] + args.split()
+        # Use npx for Node.js tools - command already contains full npx invocation
+        command_str = linter_config["command"].format(file=file_path)
+        cmd = command_str.split()
     else:
         # Direct binary
         command_template = linter_config["command"]
@@ -304,7 +303,7 @@ def hook_mode(file_path: str, config: Dict) -> None:
 
 def main():
     """Main entry point."""
-    input_data = parse_input() if sys.stdin.isatty() else {}
+    input_data = parse_input() if not sys.stdin.isatty() else {}
 
     # Extract file path from tool input
     tool_input = input_data.get("tool_input", {})

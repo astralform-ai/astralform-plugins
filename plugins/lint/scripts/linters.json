@@ -8,7 +8,7 @@
           "binary": "eslint",
           "npx": "eslint",
           "command": "npx eslint --fix {file}",
-          "config_files": [".eslintrc", ".eslintrc.json", ".eslintrc.yml", ".eslintrc.yaml", "package.json"],
+          "config_files": [".eslintrc", ".eslintrc.json", ".eslintrc.yml", ".eslintrc.yaml", "eslint.config.js", "eslint.config.mjs", "eslint.config.cjs", "package.json"],
           "docs": "https://eslint.org/docs/latest/use/getting-started",
           "install": {"npm": "eslint", "yarn": "eslint", "pnpm": "eslint"},
           "timeout": 10
