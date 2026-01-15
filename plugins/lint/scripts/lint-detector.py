@@ -24,7 +24,7 @@ def parse_input() -> Dict:
 
 def load_linters_config() -> Dict:
     """Load linters.json from plugin directory."""
-    plugin_root = os.environ.get("CLAUDE_PLUGIN_ROOT", "")
+    plugin_root = os.path.expanduser(os.environ.get("CLAUDE_PLUGIN_ROOT", ""))
     config_path = os.path.join(plugin_root, "linters.json")
 
     try:
@@ -240,7 +240,7 @@ def hook_mode(file_path: str, config: Dict) -> None:
         sys.exit(0)
 
     # Find project root
-    project_dir = os.environ.get("CLAUDE_PROJECT_DIR", "")
+    project_dir = os.path.expanduser(os.environ.get("CLAUDE_PROJECT_DIR", ""))
     project_root = find_project_root(file_path, project_dir)
 
     # Scan for missing linters
