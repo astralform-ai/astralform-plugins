@@ -11,17 +11,6 @@
           }
         ]
       }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "prompt",
-            "prompt": "Check if there are unresolved lint errors in this conversation. Look for messages containing 'LINT ERRORS REQUIRE MANUAL FIX' that were NOT followed by using the lint-fixer skill.\n\nIf there are unresolved lint errors:\n- Return {\"ok\": false, \"reason\": \"You must use the lint-fixer skill to resolve the lint errors before finishing. Run /lint-fixer or invoke the Skill tool with skill='lint-fixer'.\"}\n\nIf lint errors were resolved OR there are no lint errors:\n- Return {\"ok\": true}\n\nConversation context: $ARGUMENTS",
-            "timeout": 30
-          }
-        ]
-      }
     ]
   }
 }
