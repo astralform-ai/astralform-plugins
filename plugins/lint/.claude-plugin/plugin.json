@@ -1,7 +1,7 @@
 {
   "name": "lint",
   "description": "Data-driven lint plugin with 9 language support, auto-fix integration, and blocking behavior for missing tools",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "author": {
     "name": "atom2ueki",
     "email": "atom2ueki@gmail.com"
