@@ -10,7 +10,7 @@ import sys
 import subprocess
 import shutil
 import pathlib
-from typing import Dict, Optional, Tuple, List
+from typing import Dict, Optional, Tuple
 
 
 def parse_input() -> Dict:
@@ -259,7 +259,7 @@ def hook_mode(file_path: str, config: Dict) -> None:
 
         output = {
             "decision": "block",
-            "reason": f"Required linters are not installed:\n\n"
+            "reason": "Required linters are not installed:\n\n"
             + "\n".join(missing_info),
             "hookSpecificOutput": {
                 "additionalContext": (
@@ -290,11 +290,18 @@ def hook_mode(file_path: str, config: Dict) -> None:
             errors.append(error_msg)
 
     if errors:
+        # Collect linter names and docs for context
+        linter_names = [lang_config["linters"][ln]["name"] for ln in status["configured"]]
+        linter_docs = [lang_config["linters"][ln]["docs"] for ln in status["configured"]]
+
         output = {
             "decision": "block",
             "reason": f"Lint issues found in {file_path}:\n" + "\n".join(errors),
             "hookSpecificOutput": {
-                "additionalContext": "Lint issues need to be fixed. Use the lint-fixer skill for guidance."
+                "additionalContext": (
+                    f"LINT ERRORS REQUIRE MANUAL FIX. The lint-fixer skill can help resolve these {', '.join(linter_names)} errors. "
+                    f"Reference docs: {', '.join(linter_docs)}"
+                )
             },
         }
         print(json.dumps(output))

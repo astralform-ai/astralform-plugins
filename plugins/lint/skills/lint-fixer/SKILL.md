@@ -1,200 +1,211 @@
 ---
 name: lint-fixer
-description: Fix lint issues when auto-fix fails. Use when lint errors are reported or when code quality needs improvement.
+description: >
+  Fix lint errors that require manual intervention. Use this skill when:
+  - LINT ERRORS REQUIRE MANUAL FIX message appears
+  - PostToolUse hook blocks with lint issues
+  - ESLint, Ruff, SwiftLint, Prettier, Black, mypy, ktlint, golangci-lint, Clippy, rustfmt, clang-tidy, RuboCop, or PHP_CodeSniffer errors cannot be auto-fixed
+  - Code quality issues need manual resolution
 ---
 
 # Lint Fixer Skill
 
-This skill helps you fix lint issues when automatic fixing fails. It provides guidance for manually resolving common lint errors across different programming languages.
+Fix lint errors that automatic fixing cannot resolve. This skill provides guidance for manually resolving lint errors across different programming languages.
 
 ## When to use this skill
 
 Use this skill when:
-1. Automatic lint fixing fails
-2. Lint errors are reported in the output
-3. You need to understand and fix specific lint rules
-4. You want to improve code quality beyond automatic fixes
+1. Hook blocks with "LINT ERRORS REQUIRE MANUAL FIX"
+2. Auto-fix ran but errors remain
+3. You need to understand specific lint rules
+4. Error messages reference this skill
 
-## How to fix lint issues
+## Quick Reference by Linter
 
-### 1. Analyze the lint error message
-- Identify the file and line number mentioned in the error
-- Understand the error type (syntax, style, type, etc.)
-- Check if it's a warning or an error
+### ESLint (JavaScript/TypeScript)
+**Common non-auto-fixable errors:**
+- `no-undef`: Variable/function not defined → Add import, declare global, or fix typo
+- `no-unused-vars`: Variable declared but never used → Remove or use the variable
+- `@typescript-eslint/no-explicit-any`: Avoid `any` type → Add proper type annotations
 
-### 2. Common lint error patterns by language
+**Documentation:** https://eslint.org/docs/latest/rules/
 
-#### JavaScript/TypeScript
-- **ESLint errors**:
-  - `no-unused-vars`: Remove unused variables or export them if needed
-  - `prefer-const`: Change `let` to `const` for variables that aren't reassigned
-  - `eqeqeq`: Use `===` instead of `==` for strict equality
-  - Missing semicolons: Add `;` at end of statements
-  - Trailing commas: Add/remove trailing commas in objects/arrays
+### Prettier (JavaScript/TypeScript)
+**Most issues auto-fix.** If not:
+- Check for syntax errors preventing parsing
+- Ensure file is valid JS/TS
 
-- **Prettier formatting**:
-  - Line length exceeded: Break long lines
-  - Indentation issues: Fix spacing (2 spaces per indent)
-  - Quote consistency: Use single or double quotes consistently
+**Documentation:** https://prettier.io/docs/en/options.html
 
-- **TypeScript errors**:
-  - Type mismatches: Ensure variable types match assignments
-  - Missing types: Add explicit type annotations
-  - `any` type usage: Replace with specific types
+### TypeScript
+**Common errors:**
+- Type mismatches → Ensure types align
+- Missing properties → Add required properties
+- Implicit any → Add explicit type annotations
 
-#### Python
-- **Ruff/Flake8 errors**:
-  - `E501`: Line too long (max 88 chars for Black, 79 for PEP 8)
-  - `F401`: Unused import - remove unused imports
-  - `E302`: Expected 2 blank lines before function/class definition
-  - `W293`: Blank line contains whitespace - remove trailing spaces
+**Documentation:** https://www.typescriptlang.org/docs/
 
-- **Black formatting**:
-  - Indentation: Use 4 spaces per indent
-  - Line breaks: Break long lines at logical points
-  - Trailing commas: Add trailing commas in multi-line collections
+### Ruff (Python)
+**Common non-auto-fixable errors:**
+- `F821`: Undefined name → Add import or fix typo
+- `F841`: Local variable assigned but never used → Remove or use it
+- `E902`: Syntax error → Fix Python syntax
 
-- **mypy type errors**:
-  - Missing return type: Add `-> ReturnType` to function definitions
-  - Incompatible types: Ensure types match in assignments and returns
-  - Missing imports: Import necessary type definitions
+**Documentation:** https://docs.astral.sh/ruff/rules/
 
-#### Swift
-- **SwiftLint errors**:
-  - `colon`: Ensure colons have correct spacing (no space before, one space after)
-  - `trailing_whitespace`: Remove whitespace at end of lines
-  - `vertical_whitespace`: Ensure correct blank line spacing
-  - `opening_brace`: Opening braces should be on same line
+### Black (Python)
+**Most issues auto-fix.** If not:
+- Check for syntax errors
+- Ensure valid Python
 
-- **SwiftFormat issues**:
-  - Indentation: Use 2 spaces (not tabs)
-  - Line wrapping: Break long lines at operators
-  - Spacing: Ensure consistent spacing around operators
+**Documentation:** https://black.readthedocs.io/en/stable/
 
-#### Kotlin
-- **ktlint errors**:
-  - Indentation: Use 4 spaces (not tabs)
-  - Max line length: Break lines exceeding 120 chars
-  - Trailing commas: Add trailing commas in multi-line declarations
-  - Import ordering: Organize imports alphabetically
+### mypy (Python)
+**Common errors:**
+- `error: Incompatible types` → Fix type mismatch
+- `error: Missing return statement` → Add return
+- `error: Module has no attribute` → Check import
 
-- **Detekt issues**:
-  - Complexity: Reduce cyclomatic complexity in functions
-  - Naming: Follow Kotlin naming conventions (camelCase)
-  - Magic numbers: Replace with named constants
+**Documentation:** https://mypy.readthedocs.io/en/stable/error_codes.html
 
-#### Go
-- **golangci-lint errors**:
-  - Checkstyle violations: Fix import order, formatting issues
-  - Complexity: Reduce cyclomatic complexity in functions
-  - Unused code: Remove unused variables and imports
+### SwiftLint (Swift)
+**Common non-auto-fixable errors:**
+- `identifier_name`: Naming convention violation → Rename to match convention
+- `function_body_length`: Function too long → Refactor into smaller functions
+- `cyclomatic_complexity`: Too complex → Simplify logic
 
-#### Rust
-- **Clippy errors**:
-  - Dead code warnings: Remove unused variables
-  - Type warnings: Use appropriate types
-  - Borrowing issues: Fix ownership and borrowing patterns
+**Documentation:** https://github.com/realm/SwiftLint/blob/main/Rules.md
 
-- **rustfmt formatting**:
-  - Indentation: Use 4 spaces
-  - Line length: Break lines at 100 chars
-  - Trailing commas: Ensure consistent style
+### SwiftFormat (Swift)
+**Most issues auto-fix.** If not:
+- Check for syntax errors
+- Review .swiftformat config
 
-#### C/C++
-- **clang-tidy warnings**:
-  - Modernize: Use modern C++ features
-  - Performance: Optimize algorithms
-  - Readability: Improve code structure
+**Documentation:** https://github.com/nicklockwood/SwiftFormat
 
-#### Ruby
-- **RuboCop offenses**:
-  - Style guide violations: Follow Ruby style guide
-  - Security: Avoid unsafe method calls
-  - Performance: Use more efficient algorithms
+### ktlint (Kotlin)
+**Common non-auto-fixable errors:**
+- `standard:max-line-length`: Line too long → Break into multiple lines
+- `standard:function-naming`: Invalid function name → Follow camelCase
 
-#### PHP
-- **PHP_CodeSniffer warnings**:
-  - PSR violations: Follow PHP Standards Recommendations
-  - Naming: Use PSR-4 naming conventions
-  - Formatting: Ensure consistent code style
+**Documentation:** https://pinterest.github.io/ktlint/latest/rules/standard/
 
-### 3. Manual fixing steps
+### Detekt (Kotlin)
+**Common errors:**
+- `complexity`: High cyclomatic complexity → Refactor
+- `style`: Style violations → Follow Kotlin conventions
 
-1. **Open the file** using the Read tool
-2. **Navigate to the line number** mentioned in the error
-3. **Understand the context** around the error
-4. **Apply the fix** based on the lint rule
-5. **Check related code** for similar issues
-6. **Run the linter manually** to verify fixes
+**Documentation:** https://detekt.dev/docs/rules/
 
-### 4. Running linters manually
+### golangci-lint (Go)
+**Common errors:**
+- `unused`: Unused variable/import → Remove or use it
+- `errcheck`: Unchecked error → Handle the error
 
-If you need to test fixes, run these commands:
+**Documentation:** https://golangci-lint.run/usage/linters/
 
+### Clippy (Rust)
+**Common warnings:**
+- `clippy::unwrap_used`: Using unwrap → Use expect or handle Result
+- `clippy::todo`: TODO in code → Implement or remove
+
+**Documentation:** https://rust-lang.github.io/rust-clippy/master/
+
+### rustfmt (Rust)
+**Most issues auto-fix.** If not:
+- Check for syntax errors
+- Review rustfmt.toml config
+
+**Documentation:** https://rust-lang.github.io/rustfmt/
+
+### clang-tidy (C/C++)
+**Common warnings:**
+- `modernize-*`: Use modern C++ features
+- `readability-*`: Improve code clarity
+- `performance-*`: Optimize performance
+
+**Documentation:** https://clang.llvm.org/extra/clang-tidy/
+
+### RuboCop (Ruby)
+**Common offenses:**
+- `Style/*`: Style guide violations → Follow Ruby style
+- `Lint/*`: Potential bugs → Fix the issue
+- `Metrics/*`: Complexity issues → Refactor
+
+**Documentation:** https://docs.rubocop.org/rubocop/cops.html
+
+### PHP_CodeSniffer (PHP)
+**Common errors:**
+- PSR-12 violations → Follow PHP Standards Recommendations
+- Naming conventions → Use PSR-4 naming
+
+**Documentation:** https://github.com/squizlabs/PHP_CodeSniffer/wiki
+
+## How to Fix Lint Errors
+
+### Step 1: Identify the error
+```
+ESLint errors:
+/path/to/file.js
+  3:1  error  'console' is not defined  no-undef
+```
+- **File:** /path/to/file.js
+- **Line:** 3
+- **Rule:** no-undef
+- **Message:** 'console' is not defined
+
+### Step 2: Read the file and understand context
+Use the Read tool to view the code around the error line.
+
+### Step 3: Apply the fix
+Based on the rule, apply the appropriate fix:
+- For `no-undef` with `console`: Add browser/node environment to ESLint config
+- For unused variables: Remove the variable or use it
+- For type errors: Add proper type annotations
+
+### Step 4: Verify the fix
+Run the linter manually:
 ```bash
-# JavaScript/TypeScript
-npx eslint --fix path/to/file.js
-npx prettier --write path/to/file.js
-npx tsc --noEmit path/to/file.ts
+# JavaScript
+npx eslint path/to/file.js
 
 # Python
-ruff check --fix path/to/file.py
-black path/to/file.py
-mypy path/to/file.py
+ruff check path/to/file.py
 
 # Swift
-swiftlint --autocorrect path/to/file.swift
-swiftformat path/to/file.swift
-
-# Kotlin
-ktlint --format path/to/file.kt
-./gradlew detekt --input path/to/file.kt
+swiftlint lint path/to/file.swift
 ```
 
-### 5. When to skip or suppress lint errors
+## Suppressing Errors (Last Resort)
 
-Only suppress lint errors when:
-- The lint rule is intentionally disabled for the project
-- The code pattern is necessary for compatibility
-- There's a false positive that can't be fixed
+Only suppress when the lint rule is wrong for your use case:
 
-To suppress:
-- **ESLint**: Add `// eslint-disable-next-line rule-name` comment
-- **Python**: Add `# noqa: error-code` comment
-- **Swift**: Add `// swiftlint:disable:next rule_name` comment
-- **Kotlin**: Add `@Suppress("RuleName")` annotation
-
-### 6. Best practices
-
-1. **Fix root causes, not symptoms**: Understand why the error occurs
-2. **Check project configuration**: Some rules may be customized
-3. **Run tests after fixing**: Ensure changes don't break functionality
-4. **Consider auto-fix first**: Try running auto-fix commands before manual fixes
-5. **Document intentional violations**: Comment why a rule is suppressed
-
-## Example workflow
-
-```
-1. Read lint error: "src/utils.ts:15:5 - error: 'someVar' is assigned a value but never used"
-2. Open src/utils.ts and go to line 15
-3. Check if 'someVar' is actually used
-4. If unused, remove the variable declaration
-5. Check for similar unused variables in the file
-6. Run `npx eslint --fix src/utils.ts` to verify fix
-7. Commit changes with message: "fix: remove unused variables in utils.ts"
+```javascript
+// ESLint
+// eslint-disable-next-line no-undef
+console.log('allowed');
 ```
 
-## Additional resources
+```python
+# Ruff/Flake8
+x = unused  # noqa: F841
+```
 
-- [ESLint Rules](https://eslint.org/docs/rules/)
-- [Prettier Options](https://prettier.io/docs/en/options.html)
-- [Ruff Rules](https://docs.astral.sh/ruff/rules/)
-- [Black Configuration](https://black.readthedocs.io/en/stable/usage_and_configuration/)
-- [SwiftLint Rules](https://realm.github.io/SwiftLint/rule-directory.html)
-- [ktlint Rules](https://pinterest.github.io/ktlint/rules/standard/)
-- [golangci-lint](https://golangci-lint.run/usage)
-- [Clippy Documentation](https://rust-lang.github.io/rust-clippy/)
-- [rustfmt Guide](https://rust-lang.github.io/rustfmt/)
-- [clang-tidy Docs](https://clang.llvm.org/docs/clang-tidy.html)
-- [RuboCop Style Guide](https://docs.rubocop.org/rubocop/)
-- [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer)
+```swift
+// SwiftLint
+// swiftlint:disable:next identifier_name
+let X = 1
+```
+
+```kotlin
+// Detekt
+@Suppress("MagicNumber")
+val x = 42
+```
+
+## Best Practices
+
+1. **Fix root cause** - Don't just suppress errors
+2. **Check project config** - Rules may be customized
+3. **Run tests after fixing** - Ensure no regressions
+4. **Document suppressions** - Explain why rule is disabled
