@@ -1,7 +1,7 @@
 {
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "atom2ueki-plugins",
   "description": "Custom plugin marketplace by atom2ueki",
-  "schemaVersion": "1",
   "version": "1.0.0",
   "homepage": "https://github.com/atom2ueki/atom2ueki-plugins",
   "repository": "https://github.com/atom2ueki/atom2ueki-plugins.git",
@@ -11,18 +11,15 @@
   },
   "plugins": [
     {
-      "id": "lint",
       "name": "lint",
       "description": "Automatically runs linters after code modifications and provides feedback",
-      "path": "plugins/lint",
+      "source": "./plugins/lint",
       "version": "1.0.0",
       "author": {
         "name": "atom2ueki",
         "email": "atom2ueki@gmail.com"
       },
-      "homepage": "https://github.com/atom2ueki/atom2ueki-plugins/plugins/lint",
-      "repository": "https://github.com/atom2ueki/atom2ueki-plugins/plugins/lint.git",
-      "license": "MIT"
+      "category": "development"
     }
   ]
 }
