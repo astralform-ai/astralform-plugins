@@ -83,6 +83,41 @@ Use this skill when:
   - Naming: Follow Kotlin naming conventions (camelCase)
   - Magic numbers: Replace with named constants
 
+#### Go
+- **golangci-lint errors**:
+  - Checkstyle violations: Fix import order, formatting issues
+  - Complexity: Reduce cyclomatic complexity in functions
+  - Unused code: Remove unused variables and imports
+
+#### Rust
+- **Clippy errors**:
+  - Dead code warnings: Remove unused variables
+  - Type warnings: Use appropriate types
+  - Borrowing issues: Fix ownership and borrowing patterns
+
+- **rustfmt formatting**:
+  - Indentation: Use 4 spaces
+  - Line length: Break lines at 100 chars
+  - Trailing commas: Ensure consistent style
+
+#### C/C++
+- **clang-tidy warnings**:
+  - Modernize: Use modern C++ features
+  - Performance: Optimize algorithms
+  - Readability: Improve code structure
+
+#### Ruby
+- **RuboCop offenses**:
+  - Style guide violations: Follow Ruby style guide
+  - Security: Avoid unsafe method calls
+  - Performance: Use more efficient algorithms
+
+#### PHP
+- **PHP_CodeSniffer warnings**:
+  - PSR violations: Follow PHP Standards Recommendations
+  - Naming: Use PSR-4 naming conventions
+  - Formatting: Ensure consistent code style
+
 ### 3. Manual fixing steps
 
 1. **Open the file** using the Read tool
@@ -157,3 +192,9 @@ To suppress:
 - [Black Configuration](https://black.readthedocs.io/en/stable/usage_and_configuration/)
 - [SwiftLint Rules](https://realm.github.io/SwiftLint/rule-directory.html)
 - [ktlint Rules](https://pinterest.github.io/ktlint/rules/standard/)
+- [golangci-lint](https://golangci-lint.run/usage)
+- [Clippy Documentation](https://rust-lang.github.io/rust-clippy/)
+- [rustfmt Guide](https://rust-lang.github.io/rustfmt/)
+- [clang-tidy Docs](https://clang.llvm.org/docs/clang-tidy.html)
+- [RuboCop Style Guide](https://docs.rubocop.org/rubocop/)
+- [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer)

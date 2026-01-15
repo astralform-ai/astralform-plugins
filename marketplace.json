@@ -1,10 +1,10 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "atom2ueki-plugins",
+  "name": "astralform-plugins",
   "description": "Custom plugin marketplace by atom2ueki",
   "version": "1.0.0",
-  "homepage": "https://github.com/atom2ueki/atom2ueki-plugins",
-  "repository": "https://github.com/atom2ueki/atom2ueki-plugins.git",
+  "homepage": "https://github.com/atom2ueki/astralform-plugins",
+  "repository": "https://github.com/atom2ueki/astralform-plugins.git",
   "owner": {
     "name": "atom2ueki",
     "email": "atom2ueki@gmail.com"
@@ -12,9 +12,9 @@
   "plugins": [
     {
       "name": "lint",
-      "description": "Automatically runs linters after code modifications and provides feedback",
+      "description": "Data-driven lint plugin with 9 language support, auto-fix integration, and blocking behavior for missing tools",
       "source": "./plugins/lint",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "author": {
         "name": "atom2ueki",
         "email": "atom2ueki@gmail.com"

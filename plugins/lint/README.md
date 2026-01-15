@@ -1,32 +1,38 @@
 # Lint Plugin
 
-Automatically runs linters after code modifications and provides feedback. Supports JavaScript/TypeScript, Python, Swift, and Kotlin.
+Automatically runs linters after code modifications and provides feedback. Supports JavaScript/TypeScript, Python, Swift, Kotlin, Go, Rust, C/C++, Ruby, and PHP.
 
 ## Features
 
 - **Automatic linting**: Runs linters automatically after file edits
-- **Multi-language support**: JavaScript/TypeScript, Python, Swift, Kotlin
+- **Multi-language support**: 9 programming languages
 - **Auto-fix integration**: Attempts to fix issues automatically
+- **Blocking behavior**: Stops and shows install commands if required linters missing
 - **Manual fix skill**: Provides guidance for complex lint issues
-- **Manual lint command**: Run `/lint:check` to lint on demand
+- **Status command**: Run `/lint:status` to check configuration
 
 ## Installation
 
-Install from the atom2ueki-plugins marketplace:
+Install from the astralform-plugins marketplace:
+
 ```bash
-/plugin marketplace add https://github.com/atom2ueki/atom2ueki-plugins
+/plugin marketplace add https://github.com/atom2ueki/astralform-plugins
 /plugin install lint
 ```
+
+**Version**: 2.0.0 - Data-driven configuration with 9 language support
 
 ## How it works
 
 ### Automatic lint hooks
 When you edit or create files using Claude Code, the plugin automatically:
 
-1. Detects the file type (`.js`, `.ts`, `.py`, `.swift`, `.kt`)
+1. Detects the file type (`.js`, `.ts`, `.py`, `.swift`, `.kt`, `.go`, `.rs`, `.cpp`, `.rb`, `.php`)
 2. Checks for configured linters in the project
-3. Runs appropriate linters with auto-fix options
-4. Reports any remaining issues to Claude
+3. Verifies linter binaries are available
+4. Blocks with install commands if required linters are missing
+5. Runs appropriate linters with auto-fix options
+6. Reports any remaining issues to Claude
 
 ### Supported linters
 
@@ -36,27 +42,61 @@ When you edit or create files using Claude Code, the plugin automatically:
 | Python | Ruff, Black, isort, mypy | `pyproject.toml`, `setup.cfg`, `requirements.txt` |
 | Swift | SwiftLint, SwiftFormat | `.swiftlint.yml`, `Package.swift`, `.swiftformat` |
 | Kotlin | ktlint, Detekt | `build.gradle`, `build.gradle.kts`, `detekt.yml` |
+| Go | golangci-lint | `.golangci.yml`, `.golangci.yaml` |
+| Rust | Clippy, rustfmt | `Cargo.toml`, `.clippy.toml` |
+| C/C++ | clang-tidy | `.clang-tidy`, `.clangd` |
+| Ruby | RuboCop | `.rubocop.yml`, `.rubocop.yaml` |
+| PHP | PHP_CodeSniffer | `phpcs.xml`, `.phpcs.xml` |
+
+### Auto-fix behavior
+
+Most linters include auto-fix options that automatically resolve common issues:
+
+| Linter | Auto-fix option | What it does |
+|---------|----------------|--------------|
+| ESLint | `--fix` | Fixes common code style and syntax issues |
+| Prettier | `--write` | Formats code to match style rules |
+| Ruff | `--fix` | Fixes imports, formatting, and simple issues |
+| Black | (default) | Formats Python code consistently |
+| isort | (default) | Sorts and organizes imports |
+| SwiftLint | `--autocorrect` | Auto-corrects Swift style violations |
+| SwiftFormat | (default) | Formats Swift code |
+| ktlint | `--format` | Formats Kotlin code to style guide |
+| golangci-lint | `--fix` | Auto-fixes common Go lint issues |
+| Clippy | `--fix` | Fixes Rust lints and warnings |
+| rustfmt | (default) | Formats Rust code |
+| RuboCop | `--auto-correct` | Auto-corrects Ruby style violations |
+
+**Note**: Some linters (Detekt, clang-tidy, PHP_CodeSniffer) don't have auto-fix options - they only report issues for manual resolution.
 
 ## Usage
 
 ### Automatic linting
-No setup required! Just edit files and the plugin will run linters automatically.
+No setup required! Just edit files and the plugin will automatically run linters.
 
-### Manual linting
-```bash
-/lint:check          # Lint entire project
-/lint:check src/     # Lint specific directory
-/lint:check file.py  # Lint specific file
-```
+If a required linter is configured but not installed, the plugin will:
+- Block the file edit
+- Show the exact install command needed
+- Provide a link to official documentation
+
+### Checking Linter Status
+
+Run `/lint:status` to see:
+
+- Which linters are configured in your project
+- Which linter binaries are available on your system
+- Installation commands for any missing linters
+- Documentation links for each linter
 
 ### Manual fix guidance
-When auto-fix fails, Claude will use the `lint-fixer` skill to provide specific guidance for fixing lint issues.
+
+When auto-fix fails or for linters without auto-fix, Claude will use the `lint-fixer` skill to provide specific guidance for fixing lint issues.
 
 ## Configuration
 
 The plugin automatically detects your project's linter configuration. Ensure you have:
 
-1. **Linters installed** (e.g., `npm install --save-dev eslint prettier`)
+1. **Linters installed** (e.g., `npm install -g eslint prettier`, `pip install ruff black`)
 2. **Configuration files** (e.g., `.eslintrc.json`, `pyproject.toml`)
 3. **Project structure** with standard layout
 
@@ -64,11 +104,18 @@ The plugin automatically detects your project's linter configuration. Ensure you
 
 1. Edit a TypeScript file in Claude Code
 2. Plugin automatically runs ESLint and Prettier
-3. If issues found, Claude shows them and tries to auto-fix
-4. If auto-fix fails, Claude uses lint-fixer skill to guide manual fixes
-5. Run `/lint:check` to verify all fixes
+3. If Prettier is missing, Claude blocks and shows:
+   ```
+   Required linters are not installed:
+   
+   - Prettier: npm install -g prettier
+     Docs: https://prettier.io/docs/en/install.html
+   ```
+4. Install Prettier and retry the file edit
+5. Linting succeeds, file is committed
 
 ## Plugin Structure
+
 ```
 lint/
 ├── .claude-plugin/
@@ -76,16 +123,17 @@ lint/
 ├── hooks/
 │   └── hooks.json              # Hook configuration
 ├── scripts/
-│   └── lint-detector.py        # Main lint detection script
+│   ├── linters.json              # Data-driven linter definitions
+│   └── lint-detector.py          # Main lint detection script
 ├── skills/
 │   └── lint-fixer/
 │       └── SKILL.md            # Skill for manual lint fixing
 └── commands/
-    └── lint.md                 # Manual lint command
+    └── lint-status.md            # Lint status command
 ```
 
 ## Requirements
 
 - Claude Code 1.0.33 or later
-- Supported languages: Python 3.8+, Node.js 14+, Swift 5.3+, Kotlin 1.5+
+- Supported languages: Python 3.8+, Node.js 14+, Swift 5.3+, Kotlin 1.5+, Go 1.16+, Rust 1.60+, C/C++ compiler, Ruby 2.5+, PHP 7.2+
 - Linters must be installed in the project or globally

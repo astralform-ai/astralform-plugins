@@ -1,0 +1,192 @@
+{
+  "languages": {
+    "javascript": {
+      "extensions": [".js", ".jsx", ".ts", ".tsx"],
+      "linters": {
+        "eslint": {
+          "name": "ESLint",
+          "binary": "eslint",
+          "npx": "eslint",
+          "command": "npx eslint --fix {file}",
+          "config_files": [".eslintrc", ".eslintrc.json", ".eslintrc.yml", ".eslintrc.yaml", "package.json"],
+          "docs": "https://eslint.org/docs/latest/use/getting-started",
+          "install": {"npm": "eslint", "yarn": "eslint", "pnpm": "eslint"},
+          "timeout": 10
+        },
+        "prettier": {
+          "name": "Prettier",
+          "binary": "prettier",
+          "npx": "prettier",
+          "command": "npx prettier --write {file}",
+          "config_files": [".prettierrc", ".prettierrc.json", ".prettierrc.yml", ".prettierrc.yaml", "package.json"],
+          "docs": "https://prettier.io/docs/en/install.html",
+          "install": {"npm": "prettier", "yarn": "prettier", "pnpm": "prettier"}
+        },
+        "typescript": {
+          "name": "TypeScript",
+          "binary": "tsc",
+          "npx": "tsc",
+          "command": "npx tsc --noEmit {file}",
+          "config_files": ["tsconfig.json", "package.json"],
+          "docs": "https://www.typescriptlang.org/docs/",
+          "install": {"npm": "typescript", "yarn": "typescript", "pnpm": "typescript"},
+          "only_for": [".ts", ".tsx"]
+        }
+      }
+    },
+    "python": {
+      "extensions": [".py", ".pyi"],
+      "linters": {
+        "ruff": {
+          "name": "Ruff",
+          "binary": "ruff",
+          "command": "ruff check --fix {file}",
+          "config_files": ["pyproject.toml", "ruff.toml", ".ruff.toml"],
+          "docs": "https://docs.astral.sh/ruff/",
+          "install": {"pip": "ruff", "pipx": "ruff", "pip3": "ruff"},
+          "timeout": 10
+        },
+        "black": {
+          "name": "Black",
+          "binary": "black",
+          "command": "black {file}",
+          "config_files": ["pyproject.toml", "setup.cfg", ".black", "tox.ini"],
+          "docs": "https://black.readthedocs.io/en/stable/usage_and_configuration/",
+          "install": {"pip": "black", "pipx": "black", "pip3": "black"}
+        },
+        "isort": {
+          "name": "isort",
+          "binary": "isort",
+          "command": "isort {file}",
+          "config_files": ["pyproject.toml", ".isort.cfg", "setup.cfg", "tox.ini"],
+          "docs": "https://pycqa.github.io/isort/",
+          "install": {"pip": "isort", "pipx": "isort"}
+        },
+        "mypy": {
+          "name": "mypy",
+          "binary": "mypy",
+          "command": "mypy {file}",
+          "config_files": ["pyproject.toml", "mypy.ini", ".mypy.ini", "setup.cfg"],
+          "docs": "https://mypy.readthedocs.io/en/stable/",
+          "install": {"pip": "mypy", "pipx": "mypy"}
+        }
+      }
+    },
+    "swift": {
+      "extensions": [".swift"],
+      "linters": {
+        "swiftlint": {
+          "name": "SwiftLint",
+          "binary": "swiftlint",
+          "command": "swiftlint --autocorrect {file}",
+          "config_files": [".swiftlint.yml"],
+          "docs": "https://github.com/realm/SwiftLint/blob/main/Rules.md",
+          "install": {"homebrew": "swiftlint", "mint": "SwiftLint/SwiftLint"}
+        },
+        "swiftformat": {
+          "name": "SwiftFormat",
+          "binary": "swiftformat",
+          "command": "swiftformat {file}",
+          "config_files": [".swiftformat"],
+          "docs": "https://github.com/nicklockwood/SwiftFormat",
+          "install": {"homebrew": "swiftformat", "mint": "SwiftFormat/SwiftFormat"}
+        }
+      }
+    },
+    "kotlin": {
+      "extensions": [".kt", ".kts"],
+      "linters": {
+        "ktlint": {
+          "name": "ktlint",
+          "binary": "ktlint",
+          "command": "ktlint --format {file}",
+          "config_files": [".editorconfig", "build.gradle", "build.gradle.kts"],
+          "docs": "https://pinterest.github.io/ktlint/install/",
+          "install": {"homebrew": "ktlint", "sdkman": "ktlint"}
+        },
+        "detekt": {
+          "name": "Detekt",
+          "binary": "gradle",
+          "command": "{gradle} detekt --input {file}",
+          "config_files": ["build.gradle", "build.gradle.kts", "detekt.yml", ".detekt/config.yml"],
+          "docs": "https://detekt.dev/docs/introduction/getting-started/",
+          "install": {"homebrew": "gradle", "sdkman": "gradle"},
+          "timeout": 30
+        }
+      }
+    },
+    "go": {
+      "extensions": [".go"],
+      "linters": {
+        "golangci-lint": {
+          "name": "golangci-lint",
+          "binary": "golangci-lint",
+          "command": "golangci-lint run --fix {file}",
+          "config_files": [".golangci.yml", ".golangci.yaml", ".golangci-lint.yml"],
+          "docs": "https://golangci-lint.run/usage/installation/",
+          "install": {"brew": "golangci-lint", "go": "github.com/golangci/golangci-lint/cmd/golangci-lint@latest"}
+        }
+      }
+    },
+    "rust": {
+      "extensions": [".rs"],
+      "linters": {
+        "clippy": {
+          "name": "Clippy",
+          "binary": "clippy",
+          "command": "cargo clippy --fix {file}",
+          "config_files": ["Cargo.toml", ".clippy.toml"],
+          "docs": "https://rust-lang.github.io/rust-clippy/",
+          "install": {"rustup": "clippy"}
+        },
+        "rustfmt": {
+          "name": "rustfmt",
+          "binary": "rustfmt",
+          "command": "rustfmt {file}",
+          "config_files": ["rustfmt.toml", ".rustfmt.toml"],
+          "docs": "https://rust-lang.github.io/rustfmt/",
+          "install": {"rustup": "rustfmt"}
+        }
+      }
+    },
+    "cpp": {
+      "extensions": [".cpp", ".cc", ".cxx", ".h", ".hpp"],
+      "linters": {
+        "clang-tidy": {
+          "name": "clang-tidy",
+          "binary": "clang-tidy",
+          "command": "clang-tidy {file}",
+          "config_files": [".clang-tidy", ".clangd"],
+          "docs": "https://clang.llvm.org/docs/clang-tidy.html",
+          "install": {"brew": "llvm", "apt": "clang-tidy"}
+        }
+      }
+    },
+    "ruby": {
+      "extensions": [".rb"],
+      "linters": {
+        "rubocop": {
+          "name": "RuboCop",
+          "binary": "rubocop",
+          "command": "rubocop --auto-correct {file}",
+          "config_files": [".rubocop.yml", ".rubocop.yaml", ".rubocop.yml", ".rubocop-todo.yml"],
+          "docs": "https://docs.rubocop.org/rubocop/",
+          "install": {"gem": "rubocop"}
+        }
+      }
+    },
+    "php": {
+      "extensions": [".php"],
+      "linters": {
+        "phpcs": {
+          "name": "PHP_CodeSniffer",
+          "binary": "phpcs",
+          "command": "phpcs --standard=PSR12 {file}",
+          "config_files": ["phpcs.xml", ".phpcs.xml", "phpcs.ruleset.xml", "php-ruleset.xml"],
+          "docs": "https://github.com/squizlabs/PHP_CodeSniffer",
+          "install": {"composer": "squizlabs/php_codesniffer", "composer-global": "squizlabs/php_codesniffer"}
+        }
+      }
+    }
+  }
+}

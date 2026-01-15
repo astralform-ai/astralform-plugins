@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Claude Code Lint Detector
+Claude Code Lint Detector - Data-driven linter runner.
 Automatically runs linters after code modifications and provides feedback.
 """
 
@@ -8,8 +8,9 @@ import json
 import os
 import sys
 import subprocess
+import shutil
 import pathlib
-from typing import Dict, Optional, Tuple
+from typing import Dict, Optional, Tuple, List
 
 
 def parse_input() -> Dict:
@@ -21,49 +22,206 @@ def parse_input() -> Dict:
         sys.exit(1)
 
 
-def get_file_extension(file_path: str) -> str:
-    """Get file extension from path."""
-    return pathlib.Path(file_path).suffix.lower()
+def load_linters_config() -> Dict:
+    """Load linters.json from plugin directory."""
+    plugin_root = os.environ.get("CLAUDE_PLUGIN_ROOT", "")
+    config_path = os.path.join(plugin_root, "linters.json")
+
+    try:
+        with open(config_path, "r") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        print(f"Error: linters.json not found at {config_path}", file=sys.stderr)
+        sys.exit(1)
 
 
-def detect_language(file_path: str) -> Optional[str]:
-    """Detect programming language from file extension."""
-    ext = get_file_extension(file_path)
+def detect_language_from_config(file_path: str, config: Dict) -> Optional[str]:
+    """Detect language using extension map from config."""
+    ext = pathlib.Path(file_path).suffix.lower()
 
-    language_map = {
-        ".js": "javascript",
-        ".ts": "typescript",
-        ".tsx": "typescript",
-        ".jsx": "javascript",
-        ".py": "python",
-        ".swift": "swift",
-        ".kt": "kotlin",
-        ".kts": "kotlin",
+    for lang_name, lang_config in config["languages"].items():
+        if ext in lang_config["extensions"]:
+            return lang_name
+
+    return None
+
+
+def get_gradle_command(linter_config: Dict) -> str:
+    """Determine gradle command: try gradlew first, fallback to gradle."""
+    if os.path.exists("./gradlew"):
+        return "./gradlew"
+    else:
+        return "gradle"
+
+
+def check_binary_availability(linter_config: Dict) -> Tuple[bool, Optional[str]]:
+    """
+    Check if linter binary is available using which().
+    Returns (is_available, install_command) or (True, None).
+    """
+    # Check for direct binary
+    binary = linter_config.get("binary")
+    if binary and shutil.which(binary):
+        return True, None
+
+    # Check for npx (Node.js tools)
+    if "npx" in linter_config and shutil.which("npx"):
+        return True, None
+
+    # No binary found - provide install command
+    install_methods = linter_config.get("install", {})
+    for manager in [
+        "npm",
+        "yarn",
+        "pnpm",
+        "pip",
+        "pipx",
+        "pip3",
+        "brew",
+        "gem",
+        "composer",
+        "rustup",
+        "cargo",
+        "homebrew",
+        "mint",
+        "sdkman",
+        "go",
+        "apt",
+    ]:
+        if manager in install_methods and (
+            manager != "rustup" or shutil.which("rustup")
+        ):
+            install_pkg = install_methods[manager]
+            if manager == "npm":
+                return False, f"npm install -g {install_pkg}"
+            elif manager == "yarn":
+                return False, f"yarn global add {install_pkg}"
+            elif manager == "pnpm":
+                return False, f"pnpm install -g {install_pkg}"
+            elif manager == "pip":
+                return False, f"pip install {install_pkg}"
+            elif manager == "pipx":
+                return False, f"pipx install {install_pkg}"
+            elif manager == "pip3":
+                return False, f"pip3 install {install_pkg}"
+            elif manager == "brew":
+                return False, f"brew install {install_pkg}"
+            elif manager == "homebrew":
+                return False, f"brew install {install_pkg}"
+            elif manager == "gem":
+                return False, f"gem install {install_pkg}"
+            elif manager == "composer":
+                return False, f"composer global require {install_pkg}"
+            elif manager == "composer-global":
+                return False, f"composer global require {install_pkg}"
+            elif manager == "rustup":
+                return False, f"rustup component add {install_pkg}"
+            elif manager == "cargo":
+                return False, f"cargo install {install_pkg}"
+            elif manager == "mint":
+                return False, f"mint install {install_pkg}"
+            elif manager == "sdkman":
+                return False, f"sdk install {install_pkg}"
+            elif manager == "go":
+                return False, f"go install {install_pkg}"
+            elif manager == "apt":
+                return False, f"sudo apt install {install_pkg}"
+
+    return False, f"Install {linter_config['name']} manually"
+
+
+def scan_project_linters(project_root: str, language: str, config: Dict) -> Dict:
+    """
+    Scan project and check linter availability.
+    Returns: {
+        "configured": ["eslint"],
+        "available": ["eslint"],
+        "missing": ["prettier"],
+        "install_commands": {"prettier": "npm install -g prettier"}
     }
+    """
+    lang_config = config["languages"].get(language, {})
+    result = {"configured": [], "available": [], "missing": [], "install_commands": {}}
 
-    return language_map.get(ext)
+    for linter_name, linter_config in lang_config.get("linters", {}).items():
+        # Check if configured
+        if any(
+            os.path.exists(os.path.join(project_root, cfg))
+            for cfg in linter_config["config_files"]
+        ):
+            result["configured"].append(linter_name)
+
+            # Check binary availability
+            is_available, install_cmd = check_binary_availability(linter_config)
+
+            if is_available:
+                result["available"].append(linter_name)
+            else:
+                result["missing"].append(linter_name)
+                result["install_commands"][linter_name] = install_cmd
+
+    return result
+
+
+def run_linter_dynamic(linter_config: Dict, file_path: str) -> Tuple[bool, str]:
+    """
+    Generic linter runner using config.
+    Handles direct binary, npx, and gradle commands.
+    """
+    timeout = linter_config.get("timeout", 10)
+
+    # Determine command
+    # Special handling for Detekt which uses gradle template
+    if "{gradle}" in linter_config["command"]:
+        gradle_cmd = get_gradle_command(linter_config)
+        command_template = linter_config["command"]
+        command_str = command_template.format(gradle=gradle_cmd, file=file_path)
+        cmd = command_str.split()
+    elif "npx" in linter_config:
+        # Use npx for Node.js tools
+        binary = linter_config["npx"]
+        args = linter_config["command"].replace(f"{binary} ", "").format(file=file_path)
+        cmd = ["npx"] + args.split()
+    else:
+        # Direct binary
+        command_template = linter_config["command"]
+        command_str = command_template.format(file=file_path)
+        cmd = command_str.split()
+
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+
+        if result.returncode != 0:
+            error_output = result.stderr.strip() or result.stdout.strip()
+            if error_output:
+                return False, f"{linter_config['name']} errors:\n{error_output}"
+
+        return True, ""
+    except subprocess.TimeoutExpired:
+        return False, f"{linter_config['name']} timed out"
+    except FileNotFoundError:
+        # Should not happen if we check availability first
+        return False, f"{linter_config['name']} binary not found"
 
 
 def find_project_root(file_path: str, project_dir_env: str) -> str:
-    """Find the project root directory."""
-    # First check CLAUDE_PROJECT_DIR environment variable
+    """Find project root directory."""
     if project_dir_env and os.path.isdir(project_dir_env):
         return project_dir_env
 
-    # Fallback: start from file directory and go up looking for config files
     current_dir = os.path.dirname(os.path.abspath(file_path))
 
     config_files = [
-        "package.json",  # Node.js/TypeScript
-        "pyproject.toml",  # Python
-        "setup.cfg",  # Python
-        "requirements.txt",  # Python
-        ".swiftlint.yml",  # Swift
-        "Package.swift",  # Swift
-        "build.gradle",  # Kotlin
-        "build.gradle.kts",  # Kotlin
-        "detekt.yml",  # Kotlin
-        ".git",  # Git repository
+        "package.json",
+        "pyproject.toml",
+        "setup.cfg",
+        "requirements.txt",
+        ".swiftlint.yml",
+        "Package.swift",
+        "build.gradle",
+        "build.gradle.kts",
+        "detekt.yml",
+        ".git",
     ]
 
     while current_dir != "/":
@@ -72,354 +230,94 @@ def find_project_root(file_path: str, project_dir_env: str) -> str:
                 return current_dir
         current_dir = os.path.dirname(current_dir)
 
-    # Default to directory containing the file
     return os.path.dirname(os.path.abspath(file_path))
 
 
-def check_config_files(project_root: str, language: str) -> Dict[str, bool]:
-    """Check which linters are configured in the project."""
-    configs = {
-        "javascript": {
-            "eslint": ["package.json"],
-            "prettier": ["package.json", ".prettierrc", ".prettierrc.json"],
-            "typescript": ["package.json", "tsconfig.json"],
-        },
-        "typescript": {
-            "eslint": ["package.json"],
-            "prettier": ["package.json", ".prettierrc", ".prettierrc.json"],
-            "typescript": ["package.json", "tsconfig.json"],
-        },
-        "python": {
-            "ruff": ["pyproject.toml", "ruff.toml"],
-            "black": ["pyproject.toml"],
-            "isort": ["pyproject.toml", ".isort.cfg"],
-            "mypy": ["pyproject.toml", "mypy.ini"],
-        },
-        "swift": {"swiftlint": [".swiftlint.yml"], "swiftformat": [".swiftformat"]},
-        "kotlin": {
-            "ktlint": ["build.gradle", "build.gradle.kts"],
-            "detekt": ["build.gradle", "build.gradle.kts", "detekt.yml"],
-        },
-    }
-
-    language_configs = configs.get(language, {})
-    result = {}
-
-    for linter, files in language_configs.items():
-        result[linter] = any(
-            os.path.exists(os.path.join(project_root, f)) for f in files
-        )
-
-    return result
-
-
-def run_linter(
-    file_path: str, language: str, configs: Dict[str, bool], project_root: str
-) -> Tuple[bool, str]:
-    """Run appropriate linter for the file."""
-    original_cwd = os.getcwd()
-
-    try:
-        os.chdir(project_root)
-
-        if language == "javascript" or language == "typescript":
-            return run_js_ts_linter(file_path, configs, project_root)
-        elif language == "python":
-            return run_python_linter(file_path, configs, project_root)
-        elif language == "swift":
-            return run_swift_linter(file_path, configs, project_root)
-        elif language == "kotlin":
-            return run_kotlin_linter(file_path, configs, project_root)
-        else:
-            return False, f"No linter configured for {language} files"
-
-    finally:
-        os.chdir(original_cwd)
-
-
-def run_js_ts_linter(
-    file_path: str, configs: Dict[str, bool], project_root: str
-) -> Tuple[bool, str]:
-    """Run JavaScript/TypeScript linters."""
-    errors = []
-
-    # Run ESLint if configured
-    if configs.get("eslint"):
-        try:
-            # Try auto-fix first
-            result = subprocess.run(
-                ["npx", "eslint", "--fix", file_path],
-                capture_output=True,
-                text=True,
-                timeout=10,
-            )
-
-            if result.returncode != 0:
-                error_output = result.stderr.strip() or result.stdout.strip()
-                if error_output:
-                    errors.append(f"ESLint errors (auto-fix failed):\n{error_output}")
-        except (subprocess.TimeoutExpired, FileNotFoundError):
-            print("Warning: ESLint not available or timed out", file=sys.stderr)
-
-    # Run Prettier if configured
-    if configs.get("prettier"):
-        try:
-            result = subprocess.run(
-                ["npx", "prettier", "--write", file_path],
-                capture_output=True,
-                text=True,
-                timeout=10,
-            )
-
-            if result.returncode != 0:
-                error_output = result.stderr.strip() or result.stdout.strip()
-                if error_output:
-                    errors.append(f"Prettier formatting issues:\n{error_output}")
-        except (subprocess.TimeoutExpired, FileNotFoundError):
-            print("Warning: Prettier not available or timed out", file=sys.stderr)
-
-    # Run TypeScript compiler if configured
-    if configs.get("typescript") and file_path.endswith((".ts", ".tsx")):
-        try:
-            result = subprocess.run(
-                ["npx", "tsc", "--noEmit", file_path],
-                capture_output=True,
-                text=True,
-                timeout=10,
-            )
-
-            if result.returncode != 0:
-                error_output = result.stderr.strip() or result.stdout.strip()
-                if error_output:
-                    errors.append(f"TypeScript compilation errors:\n{error_output}")
-        except (subprocess.TimeoutExpired, FileNotFoundError):
-            print(
-                "Warning: TypeScript compiler not available or timed out",
-                file=sys.stderr,
-            )
-
-    if errors:
-        return False, "\n".join(errors)
-    return True, ""
-
-
-def run_python_linter(
-    file_path: str, configs: Dict[str, bool], project_root: str
-) -> Tuple[bool, str]:
-    """Run Python linters."""
-    errors = []
-
-    # Run Ruff if configured
-    if configs.get("ruff"):
-        try:
-            # Check first
-            result = subprocess.run(
-                ["ruff", "check", file_path], capture_output=True, text=True, timeout=10
-            )
-
-            if result.returncode != 0:
-                # Try to fix
-                fix_result = subprocess.run(
-                    ["ruff", "check", "--fix", file_path],
-                    capture_output=True,
-                    text=True,
-                    timeout=10,
-                )
-
-                if fix_result.returncode != 0:
-                    error_output = result.stdout.strip() or result.stderr.strip()
-                    if error_output:
-                        errors.append(f"Ruff errors:\n{error_output}")
-        except (subprocess.TimeoutExpired, FileNotFoundError):
-            print("Warning: Ruff not available or timed out", file=sys.stderr)
-
-    # Run Black if configured
-    if configs.get("black"):
-        try:
-            result = subprocess.run(
-                ["black", "--check", file_path],
-                capture_output=True,
-                text=True,
-                timeout=10,
-            )
-
-            if result.returncode != 0:
-                # Format the file
-                format_result = subprocess.run(
-                    ["black", file_path], capture_output=True, text=True, timeout=10
-                )
-                if format_result.returncode != 0:
-                    error_output = (
-                        format_result.stderr.strip() or format_result.stdout.strip()
-                    )
-                    if error_output:
-                        errors.append(f"Black formatting failed:\n{error_output}")
-        except (subprocess.TimeoutExpired, FileNotFoundError):
-            print("Warning: Black not available or timed out", file=sys.stderr)
-
-    # Run mypy if configured
-    if configs.get("mypy"):
-        try:
-            result = subprocess.run(
-                ["mypy", file_path], capture_output=True, text=True, timeout=10
-            )
-
-            if result.returncode != 0:
-                error_output = result.stdout.strip() or result.stderr.strip()
-                if error_output:
-                    errors.append(f"Type checking errors:\n{error_output}")
-        except (subprocess.TimeoutExpired, FileNotFoundError):
-            print("Warning: mypy not available or timed out", file=sys.stderr)
-
-    if errors:
-        return False, "\n".join(errors)
-    return True, ""
-
-
-def run_swift_linter(
-    file_path: str, configs: Dict[str, bool], project_root: str
-) -> Tuple[bool, str]:
-    """Run Swift linters."""
-    errors = []
-
-    # Run SwiftLint if configured
-    if configs.get("swiftlint"):
-        try:
-            # Try auto-correct first
-            result = subprocess.run(
-                ["swiftlint", "--autocorrect", file_path],
-                capture_output=True,
-                text=True,
-                timeout=10,
-            )
-
-            if result.returncode != 0:
-                error_output = result.stderr.strip() or result.stdout.strip()
-                if error_output:
-                    errors.append(f"SwiftLint errors:\n{error_output}")
-        except (subprocess.TimeoutExpired, FileNotFoundError):
-            print("Warning: SwiftLint not available or timed out", file=sys.stderr)
-
-    # Run SwiftFormat if configured
-    if configs.get("swiftformat"):
-        try:
-            result = subprocess.run(
-                ["swiftformat", file_path], capture_output=True, text=True, timeout=10
-            )
-
-            if result.returncode != 0:
-                error_output = result.stderr.strip() or result.stdout.strip()
-                if error_output:
-                    errors.append(f"SwiftFormat errors:\n{error_output}")
-        except (subprocess.TimeoutExpired, FileNotFoundError):
-            print("Warning: SwiftFormat not available or timed out", file=sys.stderr)
-
-    if errors:
-        return False, "\n".join(errors)
-    return True, ""
-
-
-def run_kotlin_linter(
-    file_path: str, configs: Dict[str, bool], project_root: str
-) -> Tuple[bool, str]:
-    """Run Kotlin linters."""
-    errors = []
-
-    # Run ktlint if configured
-    if configs.get("ktlint"):
-        try:
-            # Try format first
-            result = subprocess.run(
-                ["ktlint", "--format", file_path],
-                capture_output=True,
-                text=True,
-                timeout=10,
-            )
-
-            if result.returncode != 0:
-                error_output = result.stderr.strip() or result.stdout.strip()
-                if error_output:
-                    errors.append(f"ktlint formatting issues:\n{error_output}")
-        except (subprocess.TimeoutExpired, FileNotFoundError):
-            print("Warning: ktlint not available or timed out", file=sys.stderr)
-
-    # Run detekt if configured (requires Gradle wrapper)
-    if configs.get("detekt"):
-        gradle_wrapper = "./gradlew" if os.path.exists("./gradlew") else "gradle"
-        try:
-            # Run detekt for specific file (if supported)
-            result = subprocess.run(
-                [gradle_wrapper, "detekt", "--input", file_path],
-                capture_output=True,
-                text=True,
-                timeout=30,
-            )
-
-            if result.returncode != 0:
-                error_output = result.stderr.strip() or result.stdout.strip()
-                if error_output:
-                    errors.append(f"Detekt issues:\n{error_output}")
-        except (subprocess.TimeoutExpired, FileNotFoundError):
-            print("Warning: Detekt not available or timed out", file=sys.stderr)
-
-    if errors:
-        return False, "\n".join(errors)
-    return True, ""
-
-
-def main():
-    """Main entry point."""
-    input_data = parse_input()
-
-    # Extract file path from tool input
-    tool_input = input_data.get("tool_input", {})
-    file_path = tool_input.get("file_path")
-
-    if not file_path:
-        # No file to lint, exit successfully
-        sys.exit(0)
-
-    # Check if file exists
-    if not os.path.exists(file_path):
-        print(f"Warning: File does not exist: {file_path}", file=sys.stderr)
-        sys.exit(0)
-
+def hook_mode(file_path: str, config: Dict) -> None:
+    """Handle PostToolUse hook - single file."""
     # Detect language
-    language = detect_language(file_path)
+    language = detect_language_from_config(file_path, config)
     if not language:
-        # Not a supported language file, exit successfully
         sys.exit(0)
 
     # Find project root
     project_dir = os.environ.get("CLAUDE_PROJECT_DIR", "")
     project_root = find_project_root(file_path, project_dir)
 
-    # Check which linters are configured
-    configs = check_config_files(project_root, language)
+    # Scan for missing linters
+    status = scan_project_linters(project_root, language, config)
 
-    # Check if any linter is configured for this language
-    if not any(configs.values()):
-        # No linter configured for this language, exit successfully
-        sys.exit(0)
+    # BLOCK if configured linters are missing
+    if status["missing"]:
+        missing_info = []
+        for linter_name in status["missing"]:
+            linter_cfg = config["languages"][language]["linters"][linter_name]
+            install_cmd = status["install_commands"][linter_name]
+            docs = linter_cfg["docs"]
+            missing_info.append(
+                f"- {linter_cfg['name']}: {install_cmd}\n  Docs: {docs}"
+            )
 
-    # Run appropriate linter
-    success, error_message = run_linter(file_path, language, configs, project_root)
-
-    if not success and error_message:
-        # Return JSON output to block Claude and show lint errors
         output = {
             "decision": "block",
-            "reason": f"Lint issues found in {file_path}:\n{error_message}",
+            "reason": f"Required linters are not installed:\n\n"
+            + "\n".join(missing_info),
             "hookSpecificOutput": {
-                "hookEventName": "PostToolUse",
-                "additionalContext": "Lint issues need to be fixed. Use the lint-fixer skill for guidance.",
+                "additionalContext": (
+                    "Run these commands to install missing linters, "
+                    "then try again. Or run /lint:status for more details."
+                )
+            },
+        }
+        print(json.dumps(output))
+        sys.exit(1)
+
+    # Run all configured linters on file
+    lang_config = config["languages"][language]
+    errors = []
+
+    for linter_name in status["configured"]:
+        linter_config = lang_config["linters"][linter_name]
+
+        # Check if linter has file extension restriction
+        only_for = linter_config.get("only_for", [])
+        if only_for:
+            ext = pathlib.Path(file_path).suffix
+            if ext not in only_for:
+                continue  # Skip this linter for this file type
+
+        success, error_msg = run_linter_dynamic(linter_config, file_path)
+        if not success and error_msg:
+            errors.append(error_msg)
+
+    if errors:
+        output = {
+            "decision": "block",
+            "reason": f"Lint issues found in {file_path}:\n" + "\n".join(errors),
+            "hookSpecificOutput": {
+                "additionalContext": "Lint issues need to be fixed. Use the lint-fixer skill for guidance."
             },
         }
         print(json.dumps(output))
         sys.exit(0)
 
-    # Linting passed or was auto-fixed
-    sys.exit(0)
+
+def main():
+    """Main entry point."""
+    input_data = parse_input() if sys.stdin.isatty() else {}
+
+    # Extract file path from tool input
+    tool_input = input_data.get("tool_input", {})
+    file_path = tool_input.get("file_path")
+
+    if not file_path:
+        sys.exit(0)
+
+    if not os.path.exists(file_path):
+        sys.exit(0)
+
+    config = load_linters_config()
+    hook_mode(file_path, config)
 
 
 if __name__ == "__main__":

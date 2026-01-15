@@ -1,12 +1,18 @@
 {
   "name": "lint",
-  "description": "Automatically runs linters after code modifications and provides feedback",
-  "version": "1.0.0",
+  "description": "Data-driven lint plugin with 9 language support, auto-fix integration, and blocking behavior for missing tools",
+  "version": "2.0.0",
   "author": {
     "name": "atom2ueki",
     "email": "atom2ueki@gmail.com"
   },
-  "homepage": "https://github.com/atom2ueki/atom2ueki-plugins/plugins/lint",
-  "repository": "https://github.com/atom2ueki/atom2ueki-plugins/plugins/lint.git",
-  "license": "MIT"
+  "homepage": "https://github.com/atom2ueki/astralform-plugins/plugins/lint",
+  "repository": "https://github.com/atom2ueki/astralform-plugins/plugins/lint.git",
+  "license": "MIT",
+  "commands": {
+    "lint:status": {
+      "description": "Show linting status and configuration",
+      "path": "commands/lint-status.md"
+    }
+  }
 }
