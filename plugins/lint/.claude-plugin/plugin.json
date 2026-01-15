@@ -8,11 +8,5 @@
   },
   "homepage": "https://github.com/atom2ueki/astralform-plugins/plugins/lint",
   "repository": "https://github.com/atom2ueki/astralform-plugins/plugins/lint.git",
-  "license": "MIT",
-  "commands": {
-    "lint:status": {
-      "description": "Show linting status and configuration",
-      "path": "commands/lint-status.md"
-    }
-  }
+  "license": "MIT"
 }
