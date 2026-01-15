@@ -12,9 +12,9 @@
   "plugins": [
     {
       "name": "lint",
-      "description": "Automatically runs linters after code modifications and provides feedback",
+      "description": "Data-driven lint plugin with 9 language support, auto-fix integration, and blocking behavior for missing tools",
       "source": "./plugins/lint",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "author": {
         "name": "atom2ueki",
         "email": "atom2ueki@gmail.com"
