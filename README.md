@@ -6,6 +6,8 @@ Custom Claude plugin marketplace for code development tools.
 
 This is a personal plugin marketplace for Claude that provides specialized tools for software development workflows. Plugins enhance Claude's capabilities with automated code quality checks and development utilities.
 
+**Compatible with Claude Code's official marketplace schema.**
+
 ## Available Plugins
 
 ### Lint Plugin
