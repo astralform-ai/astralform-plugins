@@ -9,8 +9,9 @@
     "name": "atom2ueki",
     "email": "atom2ueki@gmail.com"
   },
-  "plugins": {
-    "lint": {
+  "plugins": [
+    {
+      "id": "lint",
       "name": "lint",
       "description": "Automatically runs linters after code modifications and provides feedback",
       "path": "plugins/lint",
@@ -23,5 +24,5 @@
       "repository": "https://github.com/atom2ueki/atom2ueki-plugins/plugins/lint.git",
       "license": "MIT"
     }
-  }
+  ]
 }
