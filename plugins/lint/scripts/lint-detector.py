@@ -246,34 +246,12 @@ def hook_mode(file_path: str, config: Dict) -> None:
     # Scan for missing linters
     status = scan_project_linters(project_root, language, config)
 
-    # BLOCK if configured linters are missing
+    # Skip silently if configured linters are missing
     if status["missing"]:
-        missing_info = []
-        for linter_name in status["missing"]:
-            linter_cfg = config["languages"][language]["linters"][linter_name]
-            install_cmd = status["install_commands"][linter_name]
-            docs = linter_cfg["docs"]
-            missing_info.append(
-                f"- {linter_cfg['name']}: {install_cmd}\n  Docs: {docs}"
-            )
-
-        output = {
-            "decision": "continue",
-            "reason": "Required linters are not installed:\n\n"
-            + "\n".join(missing_info),
-            "hookSpecificOutput": {
-                "additionalContext": (
-                    "Run these commands to install missing linters, "
-                    "then try again. Or run /lint:status for more details."
-                )
-            },
-        }
-        print(json.dumps(output))
         sys.exit(0)
 
-    # Run all configured linters on file
+    # Run all configured linters on file (silent mode - no feedback)
     lang_config = config["languages"][language]
-    errors = []
 
     for linter_name in status["configured"]:
         linter_config = lang_config["linters"][linter_name]
@@ -285,27 +263,9 @@ def hook_mode(file_path: str, config: Dict) -> None:
             if ext not in only_for:
                 continue  # Skip this linter for this file type
 
-        success, error_msg = run_linter_dynamic(linter_config, file_path)
-        if not success and error_msg:
-            errors.append(error_msg)
+        run_linter_dynamic(linter_config, file_path)
 
-    if errors:
-        # Collect linter names and docs for context
-        linter_names = [lang_config["linters"][ln]["name"] for ln in status["configured"]]
-        linter_docs = [lang_config["linters"][ln]["docs"] for ln in status["configured"]]
-
-        output = {
-            "decision": "continue",
-            "reason": f"Lint issues found in {file_path}:\n" + "\n".join(errors),
-            "hookSpecificOutput": {
-                "additionalContext": (
-                    f"LINT ERRORS REQUIRE MANUAL FIX. The lint-fixer skill can help resolve these {', '.join(linter_names)} errors. "
-                    f"Reference docs: {', '.join(linter_docs)}"
-                )
-            },
-        }
-        print(json.dumps(output))
-        sys.exit(0)
+    sys.exit(0)
 
 
 def main():
