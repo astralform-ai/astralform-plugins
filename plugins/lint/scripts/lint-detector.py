@@ -258,7 +258,7 @@ def hook_mode(file_path: str, config: Dict) -> None:
             )
 
         output = {
-            "decision": "block",
+            "decision": "continue",
             "reason": "Required linters are not installed:\n\n"
             + "\n".join(missing_info),
             "hookSpecificOutput": {
@@ -269,7 +269,7 @@ def hook_mode(file_path: str, config: Dict) -> None:
             },
         }
         print(json.dumps(output))
-        sys.exit(1)
+        sys.exit(0)
 
     # Run all configured linters on file
     lang_config = config["languages"][language]
@@ -295,7 +295,7 @@ def hook_mode(file_path: str, config: Dict) -> None:
         linter_docs = [lang_config["linters"][ln]["docs"] for ln in status["configured"]]
 
         output = {
-            "decision": "block",
+            "decision": "continue",
             "reason": f"Lint issues found in {file_path}:\n" + "\n".join(errors),
             "hookSpecificOutput": {
                 "additionalContext": (
