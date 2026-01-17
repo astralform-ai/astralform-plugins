@@ -204,12 +204,10 @@ def run_linter_dynamic(linter_config: Dict, file_path: str) -> Tuple[bool, str]:
 
 
 def find_project_root(file_path: str, project_dir_env: str) -> str:
-    """Find project root directory."""
-    if project_dir_env and os.path.isdir(project_dir_env):
-        return project_dir_env
-
+    """Find project root directory by walking up from file location."""
     current_dir = os.path.dirname(os.path.abspath(file_path))
 
+    # Config files that indicate a project root
     config_files = [
         "package.json",
         "pyproject.toml",
@@ -223,12 +221,19 @@ def find_project_root(file_path: str, project_dir_env: str) -> str:
         ".git",
     ]
 
-    while current_dir != "/":
+    # Walk up from file location to find nearest project config
+    # Stop at project_dir_env if set (don't go above repo root)
+    stop_at = project_dir_env if project_dir_env and os.path.isdir(project_dir_env) else "/"
+
+    while current_dir != "/" and len(current_dir) >= len(stop_at):
         for config in config_files:
             if os.path.exists(os.path.join(current_dir, config)):
                 return current_dir
         current_dir = os.path.dirname(current_dir)
 
+    # Fallback to project_dir_env or file's directory
+    if project_dir_env and os.path.isdir(project_dir_env):
+        return project_dir_env
     return os.path.dirname(os.path.abspath(file_path))
 
 
@@ -243,17 +248,17 @@ def hook_mode(file_path: str, config: Dict) -> None:
     project_dir = os.path.expanduser(os.environ.get("CLAUDE_PROJECT_DIR", ""))
     project_root = find_project_root(file_path, project_dir)
 
-    # Scan for missing linters
+    # Scan for available linters
     status = scan_project_linters(project_root, language, config)
 
-    # Skip silently if configured linters are missing
-    if status["missing"]:
+    # Skip if no linters are available (but don't skip just because some are missing)
+    if not status["available"]:
         sys.exit(0)
 
-    # Run all configured linters on file (silent mode - no feedback)
+    # Run all available linters on file (silent mode - no feedback)
     lang_config = config["languages"][language]
 
-    for linter_name in status["configured"]:
+    for linter_name in status["available"]:
         linter_config = lang_config["linters"][linter_name]
 
         # Check if linter has file extension restriction
