@@ -45,6 +45,13 @@ Use this skill when:
 
 **Documentation:** https://www.typescriptlang.org/docs/
 
+### Ruff Format (Python)
+**Most issues auto-fix.** If not:
+- Check for syntax errors preventing parsing
+- Ensure file is valid Python
+
+**Documentation:** https://docs.astral.sh/ruff/formatter/
+
 ### Ruff (Python)
 **Common non-auto-fixable errors:**
 - `F821`: Undefined name → Add import or fix typo

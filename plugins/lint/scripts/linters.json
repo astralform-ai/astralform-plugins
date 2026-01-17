@@ -37,6 +37,15 @@
     "python": {
       "extensions": [".py", ".pyi"],
       "linters": {
+        "ruff-format": {
+          "name": "Ruff Format",
+          "binary": "ruff",
+          "command": "ruff format {file}",
+          "config_files": ["pyproject.toml", "ruff.toml", ".ruff.toml"],
+          "docs": "https://docs.astral.sh/ruff/formatter/",
+          "install": {"pip": "ruff", "pipx": "ruff", "pip3": "ruff"},
+          "timeout": 10
+        },
         "ruff": {
           "name": "Ruff",
           "binary": "ruff",
