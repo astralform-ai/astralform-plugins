@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "astralform": {
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp-server/dist/index.js"],
+      "env": {
+        "ASTRALFORM_API_URL": "https://api.astralform.dev",
+        "ASTRALFORM_CREDENTIALS_PATH": "~/.astralform/credentials.json"
+      }
+    }
+  }
+}

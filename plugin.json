@@ -1,0 +1,30 @@
+{
+  "name": "astralform",
+  "version": "1.0.0",
+  "description": "Manage Astralform AI agent projects directly from Claude Code - create projects, manage API keys, configure LLMs, and integrate the iOS SDK",
+  "author": "Tony Li <atom2ueki@gmail.com>",
+  "repository": "https://github.com/atom2ueki/astralform-plugins",
+  "license": "MIT",
+
+  "mcp": {
+    "config": ".mcp.json"
+  },
+
+  "commands": [
+    "commands/astralform-login.md",
+    "commands/astralform-projects.md",
+    "commands/astralform-create-project.md",
+    "commands/astralform-setup.md",
+    "commands/astralform-analytics.md"
+  ],
+
+  "skills": [
+    "skills/astralform-ios-setup",
+    "skills/astralform-docs",
+    "skills/astralform-best-practices"
+  ],
+
+  "agents": [
+    "agents/project-configurator.md"
+  ]
+}

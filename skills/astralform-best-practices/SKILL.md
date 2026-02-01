@@ -1,0 +1,205 @@
+---
+description: Astralform integration best practices and optimization tips. Use when user asks about "Astralform best practices", "optimize Astralform", "Astralform security", or wants guidance on production usage.
+---
+
+# Astralform Best Practices
+
+This skill provides guidance on best practices for Astralform integrations.
+
+## When to Use
+
+- User asks about best practices or optimization
+- User is preparing for production deployment
+- User wants to improve security, performance, or cost
+- User is troubleshooting integration issues
+
+## Categories
+
+### 1. Security Best Practices
+
+#### API Key Management
+```swift
+// NEVER do this
+let apiKey = "sk_live_xxxxx" // Hardcoded - BAD!
+
+// DO this instead
+let apiKey = Bundle.main.object(forInfoDictionaryKey: "ASTRALFORM_API_KEY") as? String ?? ""
+
+// Or use environment-based configuration
+#if DEBUG
+let apiKey = ProcessInfo.processInfo.environment["ASTRALFORM_API_KEY_DEV"] ?? ""
+#else
+let apiKey = ProcessInfo.processInfo.environment["ASTRALFORM_API_KEY_PROD"] ?? ""
+#endif
+```
+
+#### End User ID Security
+- Use authenticated user identifiers
+- Never expose internal database IDs
+- Consider hashing user IDs: `SHA256(userId + salt)`
+- Implement session validation before chat
+
+#### Data Sensitivity
+- Configure conversation encryption (enabled by default)
+- Use project-specific encryption keys
+- Implement data retention policies
+- Consider PII handling in system prompts
+
+### 2. LLM Selection Guide
+
+| Use Case | Recommended Provider | Model | Why |
+|----------|---------------------|-------|-----|
+| General chat | Anthropic | claude-sonnet-4-20250514 | Best quality/cost balance |
+| High volume | Groq | llama-3.3-70b | Fast, cost-effective |
+| Complex reasoning | Anthropic | claude-opus-4-20250514 | Best reasoning |
+| Code generation | Anthropic | claude-sonnet-4-20250514 | Strong code understanding |
+| Local/private | Ollama | llama3.2 | Data stays on-device |
+| Budget conscious | Platform | varies | Optimized routing |
+
+#### Model Selection Tips
+1. Start with Claude Sonnet for most use cases
+2. Monitor token usage via analytics
+3. Consider Groq for high-volume, latency-sensitive apps
+4. Use Ollama for privacy-critical applications
+
+### 3. Token Optimization
+
+#### System Prompt Best Practices
+```swift
+// INEFFICIENT - Too verbose
+let systemPrompt = """
+You are an AI assistant. You should always be helpful.
+You should respond in a friendly manner. You should
+provide accurate information. You should...
+""" // Wastes tokens on every request
+
+// EFFICIENT - Concise and clear
+let systemPrompt = """
+Helpful iOS app assistant. Be concise. Format lists with bullets.
+Focus: \(appContext)
+""" // Clear, specific, minimal
+```
+
+#### Conversation Management
+- Implement conversation summaries for long chats
+- Clear old conversations regularly
+- Use `max_tokens` to limit response length
+- Consider conversation context windows
+
+### 4. Error Handling
+
+```swift
+do {
+    let response = try await Astralform.shared.chat(message: userInput)
+} catch AstralformError.rateLimited(let retryAfter) {
+    // Implement exponential backoff
+    try await Task.sleep(for: .seconds(retryAfter))
+    // Retry
+} catch AstralformError.networkError {
+    // Show offline message, queue for retry
+} catch AstralformError.invalidAPIKey {
+    // Log error, prompt user to check configuration
+} catch AstralformError.llmNotConfigured {
+    // Project needs LLM setup in dashboard
+} catch {
+    // Generic error handling
+}
+```
+
+### 5. Performance Optimization
+
+#### Streaming Best Practices
+```swift
+// Use streaming for better UX
+for try await chunk in Astralform.shared.streamChat(message: userInput) {
+    // Update UI incrementally
+    DispatchQueue.main.async {
+        self.responseText += chunk.content
+    }
+}
+```
+
+#### Caching Strategies
+- Cache static tool results (e.g., app configuration)
+- Implement conversation history caching
+- Use background refresh for non-urgent updates
+
+#### Network Optimization
+- Implement request queuing for offline support
+- Use connection pooling (SDK handles this)
+- Consider regional API endpoints for latency
+
+### 6. MCP Tool Configuration
+
+#### Tool Selection
+| Tool Type | When to Use | Configuration |
+|-----------|-------------|---------------|
+| Platform (Tavily) | Web search needs | Enable in dashboard |
+| Server MCP | Backend integrations | Add via dashboard |
+| Client MCP | Device features | Register in SDK |
+
+#### Client Tool Best Practices
+```swift
+// GOOD - Specific, minimal data
+Astralform.registerClientTool("get_weather") { params in
+    let location = params["location"] as? String ?? "current"
+    let weather = await WeatherService.current(for: location)
+    return .success([
+        "temp": weather.temperature,
+        "condition": weather.condition
+    ])
+}
+
+// BAD - Returns too much data
+Astralform.registerClientTool("get_all_data") { params in
+    // Don't return entire database dumps
+    return .success(hugeDataObject) // Wasteful!
+}
+```
+
+### 7. Production Checklist
+
+Before going live:
+
+- [ ] API keys are stored securely (not hardcoded)
+- [ ] Using production API key (`sk_live_...`)
+- [ ] LLM provider configured with production API key
+- [ ] Error handling implemented for all chat calls
+- [ ] Rate limiting UI feedback in place
+- [ ] Analytics monitoring enabled
+- [ ] Appropriate system prompt configured
+- [ ] End user IDs properly scoped
+- [ ] Privacy policy updated for AI usage disclosure
+- [ ] Tested on real devices (not just simulator)
+
+### 8. Cost Management
+
+#### Monitoring Usage
+- Check analytics weekly: `/astralform-analytics`
+- Set up billing alerts in dashboard
+- Track per-user token consumption
+
+#### Cost Reduction Strategies
+1. Optimize system prompts (shorter = cheaper)
+2. Implement conversation limits
+3. Use appropriate model tiers
+4. Cache frequently requested information
+5. Consider Groq for high-volume features
+
+## Common Pitfalls
+
+| Pitfall | Solution |
+|---------|----------|
+| Hardcoded API keys | Use environment/config |
+| No error handling | Implement comprehensive catch |
+| Ignoring rate limits | Add backoff and UI feedback |
+| Verbose system prompts | Keep concise, use context |
+| No offline handling | Queue messages, show status |
+| Missing analytics | Enable and monitor regularly |
+
+## Getting Help
+
+If you need additional guidance:
+1. Search docs: `astralform_search_docs` tool
+2. Check GitHub issues: https://github.com/astralform
+3. Contact support via dashboard
