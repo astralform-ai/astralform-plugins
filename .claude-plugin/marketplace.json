@@ -14,7 +14,7 @@
       "name": "astralform",
       "description": "Manage Astralform AI agent projects directly from Claude Code - create projects, manage API keys, configure LLMs, and integrate the iOS SDK",
       "source": "./",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "author": {
         "name": "atom2ueki",
         "email": "atom2ueki@gmail.com"
