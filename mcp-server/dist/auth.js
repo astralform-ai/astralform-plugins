@@ -5,7 +5,7 @@ import { join } from "path";
 const CREDENTIALS_DIR = join(homedir(), ".astralform");
 const CREDENTIALS_FILE = join(CREDENTIALS_DIR, "credentials.json");
 export function getApiUrl() {
-    return process.env.ASTRALFORM_API_URL || "https://api.astralform.dev";
+    return process.env.ASTRALFORM_API_URL || "https://api.astralform.ai";
 }
 export async function loadCredentials() {
     try {
