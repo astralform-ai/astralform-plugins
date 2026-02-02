@@ -1,0 +1,18 @@
+{
+  "name": "astralform-plugins",
+  "version": "1.0.0",
+  "description": "Astralform plugin marketplace - AI agent project management tools for Claude Code",
+  "author": {
+    "name": "atom2ueki",
+    "url": "https://github.com/atom2ueki"
+  },
+  "repository": "https://github.com/astralform-ai/astralform-plugins",
+  "license": "MIT",
+  "keywords": [
+    "astralform",
+    "ai-agents",
+    "mcp",
+    "ios-sdk",
+    "llm-configuration"
+  ]
+}
