@@ -11,6 +11,17 @@
   },
   "plugins": [
     {
+      "name": "astralform",
+      "description": "Manage Astralform AI agent projects directly from Claude Code - create projects, manage API keys, configure LLMs, and integrate the iOS SDK",
+      "source": ".",
+      "version": "1.0.0",
+      "author": {
+        "name": "atom2ueki",
+        "email": "atom2ueki@gmail.com"
+      },
+      "category": "development"
+    },
+    {
       "name": "lint",
       "description": "Data-driven lint plugin with 9 language support, auto-fix integration, and blocking behavior for missing tools",
       "source": "./plugins/lint",
