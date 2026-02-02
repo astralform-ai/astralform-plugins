@@ -16,7 +16,7 @@ Manage Astralform AI agent projects directly from Claude Code.
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/astralform/astralform-plugins.git ~/.claude/plugins/astralform
+   git clone https://github.com/astralform-ai/astralform-plugins.git ~/.claude/plugins/astralform
    ```
 
 2. Enable the plugin in Claude Code settings
