@@ -77,7 +77,7 @@ struct MyApp: App {
     init() {
         Astralform.configure(
             apiKey: "YOUR_API_KEY",
-            baseURL: URL(string: "https://api.astralform.dev")!
+            baseURL: URL(string: "https://api.astralform.ai")!
         )
     }
 
@@ -101,7 +101,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
         Astralform.configure(
             apiKey: "YOUR_API_KEY",
-            baseURL: URL(string: "https://api.astralform.dev")!
+            baseURL: URL(string: "https://api.astralform.ai")!
         )
         return true
     }

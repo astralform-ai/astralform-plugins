@@ -2,7 +2,7 @@
   "mcpServers": {
     "astralform": {
       "type": "http",
-      "url": "https://api.astralform.ai/v1/mcp"
+      "url": "https://mcp.astralform.ai/mcp"
     }
   }
 }

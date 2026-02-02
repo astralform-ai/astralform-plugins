@@ -12,7 +12,7 @@ You are helping the user authenticate with Astralform using OAuth Device Flow.
 1. **Start the authentication flow** by calling the `astralform_device_code` MCP tool.
 
 2. **Display the login instructions** to the user:
-   - Show the verification URL (e.g., `https://app.astralform.dev/device`)
+   - Show the verification URL (e.g., `https://astralform.ai/device`)
    - Show the user code they need to enter
    - Remind them they have a limited time (usually 15 minutes)
 
@@ -37,7 +37,7 @@ You are helping the user authenticate with Astralform using OAuth Device Flow.
 ```
 Starting Astralform authentication...
 
-Please visit: https://app.astralform.dev/device
+Please visit: https://astralform.ai/device
 And enter code: ABCD-1234
 
 Waiting for authentication...
