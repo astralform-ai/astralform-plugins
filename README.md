@@ -19,14 +19,7 @@ Manage Astralform AI agent projects directly from Claude Code.
    git clone https://github.com/astralform/astralform-plugins.git ~/.claude/plugins/astralform
    ```
 
-2. Build the MCP server:
-   ```bash
-   cd ~/.claude/plugins/astralform/mcp-server
-   npm install
-   npm run build
-   ```
-
-3. Enable the plugin in Claude Code settings
+2. Enable the plugin in Claude Code settings
 
 ## Commands
 
@@ -120,7 +113,6 @@ The plugin uses OAuth 2.0 Device Authorization Flow:
 
 ## Requirements
 
-- Node.js 18+
 - Claude Code CLI
 - Astralform account
 
