@@ -1,6 +1,7 @@
 ---
 name: astralform-project-configurator
 description: Full-service agent for setting up and configuring Astralform projects. Use when user needs comprehensive project setup, LLM configuration, MCP server integration, or multi-step Astralform workflows.
+model: inherit
 tools:
   - Read
   - Write

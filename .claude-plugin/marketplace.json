@@ -1,12 +1,12 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "astralform-plugins",
-  "description": "Custom plugin marketplace by atom2ueki",
+  "description": "Astralform plugins for Claude Code - manage AI agent projects and development tooling",
   "version": "1.0.0",
-  "homepage": "https://github.com/atom2ueki/astralform-plugins",
-  "repository": "https://github.com/atom2ueki/astralform-plugins.git",
+  "homepage": "https://github.com/astralform-ai/astralform-plugins",
+  "repository": "https://github.com/astralform-ai/astralform-plugins.git",
   "owner": {
-    "name": "atom2ueki",
+    "name": "Tony Li",
     "email": "atom2ueki@gmail.com"
   },
   "plugins": [
@@ -16,7 +16,7 @@
       "source": "./",
       "version": "1.2.0",
       "author": {
-        "name": "atom2ueki",
+        "name": "Tony Li",
         "email": "atom2ueki@gmail.com"
       },
       "category": "development"
@@ -25,9 +25,9 @@
       "name": "lint",
       "description": "Data-driven lint plugin with 9 language support, auto-fix integration, and blocking behavior for missing tools",
       "source": "./plugins/lint",
-      "version": "2.0.0",
+      "version": "2.7.0",
       "author": {
-        "name": "atom2ueki",
+        "name": "Tony Li",
         "email": "atom2ueki@gmail.com"
       },
       "category": "development"

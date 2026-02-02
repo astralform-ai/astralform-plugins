@@ -3,10 +3,10 @@
   "description": "Data-driven lint plugin with 9 language support and auto-fix integration",
   "version": "2.7.0",
   "author": {
-    "name": "atom2ueki",
+    "name": "Tony Li",
     "email": "atom2ueki@gmail.com"
   },
-  "homepage": "https://github.com/atom2ueki/astralform-plugins/plugins/lint",
-  "repository": "https://github.com/atom2ueki/astralform-plugins/plugins/lint.git",
+  "homepage": "https://github.com/astralform-ai/astralform-plugins/tree/main/plugins/lint",
+  "repository": "https://github.com/astralform-ai/astralform-plugins",
   "license": "MIT"
 }
