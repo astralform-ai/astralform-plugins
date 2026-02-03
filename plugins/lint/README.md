@@ -20,7 +20,7 @@ Install from the astralform-plugins marketplace:
 /plugin install lint
 ```
 
-**Version**: 2.0.0 - Data-driven configuration with 9 language support
+**Version**: 2.7.0 - Data-driven configuration with 9 language support
 
 ## How it works
 

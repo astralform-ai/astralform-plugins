@@ -16,12 +16,6 @@ if ! command -v claude &> /dev/null; then
     exit 1
 fi
 
-# Check if MCP server is built
-if [[ ! -f "$PLUGIN_DIR/mcp-server/dist/index.js" ]]; then
-    echo "MCP server not built. Running setup first..."
-    "$SCRIPT_DIR/setup.sh"
-fi
-
 # Add plugin to Claude Code
 echo "Adding plugin to Claude Code..."
 claude plugin add "$PLUGIN_DIR"
