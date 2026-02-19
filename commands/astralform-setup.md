@@ -43,7 +43,17 @@ Complete guided setup for a new Astralform project, including LLM configuration 
    - Show available templates from `astralform_list_mcp_templates`
    - Guide through configuration
 
-7. **Show summary**:
+7. **Optional: Enable connectors**:
+   - Ask "Would you like to enable any connectors (Slack, Notion, GitHub)?"
+   - If yes, call `astralform_list_connectors` to show catalog
+   - Let user select connectors to enable
+   - For each selected connector, collect credentials by type:
+     - OAuth: client_id + client_secret
+     - API key: key
+     - Remote MCP: no credentials needed
+   - Call `astralform_enable_connector` for each
+
+8. **Show summary**:
    - Project name and ID
    - LLM configuration
    - API key prefix
@@ -91,12 +101,13 @@ Step 5: Platform Tools
 ? Tavily API key: tvly-xxxxxxx
 ✅ Tavily search enabled
 
-Step 6: Summary
+Step 7: Summary
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Project: My AI App
 LLM: OpenAI gpt-4o
 API Key: sk_test_abc... (save this!)
 Tools: Tavily search
+Connectors: Slack (3 tools)
 
 Next steps:
 1. Add the iOS SDK to your app

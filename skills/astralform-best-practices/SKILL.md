@@ -157,7 +157,28 @@ Astralform.registerClientTool("get_all_data") { params in
 }
 ```
 
-### 7. Production Checklist
+### 7. Connector Security
+
+#### OAuth App Best Practices
+- Create dedicated OAuth apps per project (not shared across projects)
+- Request minimum required scopes (principle of least privilege)
+- Rotate client secrets periodically
+- Use separate OAuth apps for development and production
+- Monitor OAuth token usage in provider dashboards
+
+#### API Key Connectors
+- Use service-specific API keys (not personal tokens)
+- Rotate API keys on a regular schedule
+- Set key permissions to minimum required access
+- Monitor usage through the service provider's dashboard
+
+#### End-User Authentication
+- Enable `require_auth` for connectors that access user data
+- Test the OAuth flow with real end-user accounts before launch
+- Handle token expiration and refresh gracefully
+- Provide clear UI for users to connect/disconnect services
+
+### 8. Production Checklist
 
 Before going live:
 
@@ -167,12 +188,15 @@ Before going live:
 - [ ] Error handling implemented for all chat calls
 - [ ] Rate limiting UI feedback in place
 - [ ] Analytics monitoring enabled
+- [ ] Connector OAuth apps use minimum scopes
+- [ ] Connector credentials are production (not dev) keys
+- [ ] End-user auth flow tested with real accounts
 - [ ] Appropriate system prompt configured
 - [ ] End user IDs properly scoped
 - [ ] Privacy policy updated for AI usage disclosure
 - [ ] Tested on real devices (not just simulator)
 
-### 8. Cost Management
+### 9. Cost Management
 
 #### Monitoring Usage
 - Check analytics weekly: `/astralform-analytics`

@@ -30,14 +30,19 @@ You are a specialized agent for configuring Astralform projects. Your job is to 
    - Configure environment variables securely
    - Enable/disable servers as needed
 
-3. **iOS SDK Integration**
+3. **Connector Configuration**
+   - Enable OAuth connectors (Slack, Notion, GitHub)
+   - Enable API key connectors
+   - Configure end-user authentication settings
+
+4. **iOS SDK Integration**
    - Detect project type (SPM, CocoaPods, Xcode)
    - Add Astralform dependency
    - Configure initialization code
    - Set up ChatView integration
    - Register client MCP tools
 
-4. **Best Practices Application**
+5. **Best Practices Application**
    - Secure API key storage
    - Proper error handling
    - Token optimization
@@ -64,6 +69,7 @@ When activated, follow this process:
 3. Generate API key for the project
 4. Configure platform tools if needed
 5. Add MCP servers if requested
+6. Enable connectors if requested (Slack, Notion, GitHub)
 
 ### Phase 3: iOS Integration (if applicable)
 1. Find the Xcode/Swift project
@@ -110,6 +116,12 @@ Use these Astralform MCP tools:
 - `astralform_list_mcp_templates` - MCP server templates
 - `astralform_add_mcp_server` - Add MCP server
 - `astralform_update_project_tool` - Configure platform tools
+- `astralform_list_connectors` - List connector catalog
+- `astralform_get_connector` - Get connector details
+- `astralform_list_project_connectors` - List project connectors
+- `astralform_enable_connector` - Enable connector for project
+- `astralform_update_project_connector` - Update connector config
+- `astralform_disable_connector` - Remove connector from project
 - `astralform_search_docs` - Search documentation
 
 ## Example Session
