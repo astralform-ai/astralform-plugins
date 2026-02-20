@@ -1,4 +1,5 @@
 ---
+name: astralform-ios-setup
 description: Integrate Astralform iOS SDK into Swift/SwiftUI projects. Use when user asks to "add Astralform", "integrate Astralform SDK", "setup Astralform in iOS app", or "configure Astralform Swift client".
 ---
 

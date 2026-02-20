@@ -1,4 +1,5 @@
 ---
+name: astralform-best-practices
 description: Astralform integration best practices and optimization tips. Use when user asks about "Astralform best practices", "optimize Astralform", "Astralform security", or wants guidance on production usage.
 ---
 
@@ -195,6 +196,9 @@ Before going live:
 - [ ] End user IDs properly scoped
 - [ ] Privacy policy updated for AI usage disclosure
 - [ ] Tested on real devices (not just simulator)
+- [ ] Agent system prompts reviewed for accuracy
+- [ ] Skills assigned to appropriate agents
+- [ ] Memory feature enabled if needed for personalization
 
 ### 9. Cost Management
 
@@ -209,6 +213,75 @@ Before going live:
 3. Use appropriate model tiers
 4. Cache frequently requested information
 5. Consider Groq for high-volume features
+
+### 10. Multi-Agent Best Practices
+
+#### When to Use Multi-Agent
+- **Single agent**: Simple Q&A, single-domain apps, low complexity
+- **Multi-agent**: Multiple domains (support + sales), different tool access needs, specialized workflows
+
+#### Architecture Guidelines
+- Use the default agent as the entry point / orchestrator
+- Give each agent a clear, focused description (the supervisor uses this for routing)
+- Use lowercase-with-hyphens naming: `support-agent`, `billing-helper`
+- Consider cheaper/faster models for simple routing agents (e.g., Groq for triage)
+- Assign minimal resources per agent (only the skills/MCP servers/tools it needs)
+
+#### System Prompt Design
+```
+# Good - Focused and specific
+You are a billing specialist. Handle invoice queries, payment issues,
+and subscription changes. Escalate security concerns to the default agent.
+
+# Bad - Too broad
+You are a helpful assistant that can do anything.
+```
+
+### 11. Skills Best Practices
+
+#### SKILL.md Format
+Skills use YAML frontmatter with markdown body:
+```yaml
+---
+name: my-skill
+description: Short description of what the skill provides
+version: 1.0.0
+---
+# Skill content here
+```
+
+#### Guidelines
+- Keep skills under 500 lines for optimal performance
+- Write clear, actionable descriptions (used for activation matching)
+- Use URL import (`astralform_create_skill_from_url`) for skills hosted in repos
+- Use inline content (`astralform_create_skill`) for project-specific knowledge
+- Assign skills to specific agents rather than enabling globally
+- Version your skills and use `astralform_refresh_skill` to update from source
+
+### 12. Memory Best Practices
+
+#### Overview
+Memory is a feature-flagged capability that gives agents persistent recall across conversations.
+
+#### Key Concepts
+- **Feature flag**: Memory must be enabled per project in settings
+- **Namespace isolation**: Memory is scoped per-project and per-user
+- **Semantic search**: Memories are retrieved via vector similarity (not exact match)
+- **Agent-mediated**: Agents use `save_memory` and `search_memories` tools
+
+#### Usage Guidelines
+- Enable memory for apps that benefit from personalization (preferences, history)
+- Don't store sensitive PII in memory - treat it as semi-persistent context
+- Memory is semantic: store concepts and preferences, not exact data
+- Test memory retrieval with varied phrasings to verify recall quality
+- Consider memory as supplementary context, not a database replacement
+
+#### Use Cases
+| Use Case | What to Store | Example |
+|----------|---------------|---------|
+| Preferences | User likes/dislikes | "User prefers dark mode and metric units" |
+| Context | Ongoing projects | "Working on Q4 marketing campaign" |
+| Personalization | Communication style | "User prefers brief, bullet-point responses" |
 
 ## Common Pitfalls
 

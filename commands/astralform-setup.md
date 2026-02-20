@@ -53,12 +53,31 @@ Complete guided setup for a new Astralform project, including LLM configuration 
      - Remote MCP: no credentials needed
    - Call `astralform_enable_connector` for each
 
-8. **Show summary**:
-   - Project name and ID
-   - LLM configuration
-   - API key prefix
-   - Enabled tools
-   - Next steps for SDK integration
+8. **Optional: Create agents**:
+   - Ask "Would you like to set up a multi-agent system?"
+   - If yes, explain that agents are specialized workers routed by a supervisor
+   - Guide through creating additional agents with `astralform_create_agent`:
+     - Agent name, display name, description
+     - System prompt for the agent's specialty
+     - Optional LLM override
+   - Suggest assigning skills and MCP servers to each agent
+
+9. **Optional: Add skills**:
+   - Ask "Would you like to add custom skills to your agents?"
+   - If yes, show options:
+     - Create from content: provide name + SKILL.md body via `astralform_create_skill`
+     - Import from URL: provide URL to a SKILL.md file via `astralform_create_skill_from_url`
+   - Assign created skills to agents via `astralform_update_agent`
+
+10. **Show summary**:
+    - Project name and ID
+    - LLM configuration
+    - API key prefix
+    - Enabled tools
+    - Connectors enabled (count + names)
+    - Agents created (count + names)
+    - Skills added (count + names)
+    - Next steps for SDK integration
 
 ## Example Output
 
@@ -101,13 +120,23 @@ Step 5: Platform Tools
 ? Tavily API key: tvly-xxxxxxx
 ✅ Tavily search enabled
 
-Step 7: Summary
+Step 8: Agents
+? Set up multi-agent system? (no): yes
+? Agent name: support-agent
+✅ Agent created: support-agent
+
+Step 9: Skills
+? Add custom skills? (no): no
+
+Step 10: Summary
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Project: My AI App
 LLM: OpenAI gpt-4o
 API Key: sk_test_abc... (save this!)
 Tools: Tavily search
 Connectors: Slack (3 tools)
+Agents: 2 (default, support-agent)
+Skills: 1 (knowledge-base)
 
 Next steps:
 1. Add the iOS SDK to your app

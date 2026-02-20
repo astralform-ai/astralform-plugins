@@ -1,4 +1,5 @@
 ---
+name: astralform-docs
 description: Search and retrieve Astralform documentation. Use when user asks about "Astralform docs", "how to use Astralform", "Astralform API", or needs help with Astralform features.
 ---
 
@@ -33,6 +34,10 @@ Astralform uses **Mintlify** for AI-ready documentation:
 | `backend-api/` | REST API reference | Endpoints, streaming, tool results |
 | `dashboard/` | Web dashboard | Projects, API keys, LLM config |
 | `mcp-config/` | MCP configuration | Server MCP, client MCP, platform tools |
+| `agents/` | Multi-agent system | Agent creation, configuration, routing |
+| `skills/` | Custom skills | SKILL.md format, importing, management |
+| `connectors/` | Connector integrations | OAuth setup, API keys, end-user auth |
+| `memory/` | Agent memory | Feature flags, semantic search, privacy |
 
 ## How to Search Documentation
 
@@ -99,6 +104,38 @@ astralform_get_doc(
 | "Server MCP setup" | `/mcp-config/server-mcp` |
 | "Client MCP tools" | `/mcp-config/client-mcp` |
 | "Platform tools" | `/mcp-config/platform-tools` |
+
+### Agents
+
+| Query | Suggested Page |
+|-------|----------------|
+| "Create agent" | `/agents/creating-agents` |
+| "Multi-agent routing" | `/agents/routing` |
+| "Agent LLM override" | `/agents/configuration` |
+
+### Skills
+
+| Query | Suggested Page |
+|-------|----------------|
+| "Create skill" | `/skills/creating-skills` |
+| "SKILL.md format" | `/skills/format` |
+| "Import skill from URL" | `/skills/importing` |
+
+### Connectors
+
+| Query | Suggested Page |
+|-------|----------------|
+| "Enable connector" | `/connectors/setup` |
+| "OAuth configuration" | `/connectors/oauth` |
+| "Connector tools" | `/connectors/tools` |
+
+### Memory
+
+| Query | Suggested Page |
+|-------|----------------|
+| "Enable memory" | `/memory/setup` |
+| "Memory search" | `/memory/semantic-search` |
+| "Memory privacy" | `/memory/privacy` |
 
 ## Response Format
 
