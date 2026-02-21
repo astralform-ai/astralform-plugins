@@ -152,7 +152,7 @@ User: "How do I use Astralform with my own OpenAI key?"
 
 Response pattern:
 1. Search docs for "OpenAI configuration"
-2. Summarize the BYOK (Bring Your Own Key) feature
+2. Summarize the Model Providers feature (bring your own API keys)
 3. Show configuration steps from `/dashboard/llm-configuration`
 4. Link to: `https://astralform.mintlify.app/dashboard/llm-configuration`
 

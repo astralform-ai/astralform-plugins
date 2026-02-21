@@ -48,7 +48,7 @@ claude plugins add --global https://github.com/astralform-ai/astralform-plugins
 
 - **Manage Projects** - Create, update, and delete Astralform projects
 - **API Keys** - Generate and manage API keys
-- **LLM Config** - Configure OpenAI, Anthropic, Groq, or Ollama
+- **LLM Config** - Configure OpenAI, Anthropic, Groq, or Ollama Cloud
 - **MCP Servers** - Add GitHub, Slack, database integrations
 - **iOS SDK** - Automated Swift/SwiftUI SDK setup
 

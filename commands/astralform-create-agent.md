@@ -32,30 +32,40 @@ Interactive wizard to create a new specialized agent for an Astralform project.
    - Ask user to provide a system prompt for the agent
    - Suggest keeping it concise and focused on the agent's specialty
 
-5. **Optional: LLM override**:
+5. **Thinking/Reasoning** (optional):
+   - Ask if this agent should use extended thinking (for supported models like Claude, OpenAI o-series)
+   - Set `thinking_enabled: true/false`
+   - Note: only effective with providers that support thinking tokens
+
+6. **Avatar** (optional):
+   - Ask if they want a custom avatar URL for the agent
+   - Default: auto-generated from agent name (no action needed)
+   - If custom, provide as `avatar_url` parameter
+
+7. **Optional: LLM override**:
    - Ask if they want this agent to use a different LLM than the project default
    - If yes, call `astralform_list_llm_providers` to show options
-   - Collect provider, model, and API key (if BYOK)
+   - Collect provider, model, and API key (if required)
 
-6. **Optional: Assign skills**:
+8. **Optional: Assign skills**:
    - Call `astralform_list_skills` to show available skills
    - Let user select which skills to assign to this agent
    - Skills give the agent domain-specific knowledge
 
-7. **Optional: Assign MCP servers**:
+9. **Optional: Assign MCP servers**:
    - Call `astralform_list_mcp_servers` to show available servers
    - Let user select which MCP servers this agent can access
    - Each server provides tools the agent can use
 
-8. **Optional: Assign platform tools**:
+10. **Optional: Assign platform tools**:
    - Call `astralform_list_platform_tools` to show available tools
    - Let user select which platform tools to enable (e.g., Tavily search)
 
-9. **Create agent**:
+11. **Create agent**:
    - Call `astralform_create_agent` with all collected configuration
    - Display confirmation with full agent summary
 
-10. **Show next steps**:
+12. **Show next steps**:
     - Explain how routing works (supervisor directs to agents by name)
     - Mention `astralform_update_agent` for future changes
     - Suggest testing with a chat session
@@ -81,29 +91,36 @@ Step 4: System Prompt
   You are a customer support specialist. Help users resolve issues
   quickly. Escalate to human support when you cannot resolve.
 
-Step 5: LLM Override
+Step 5: Thinking/Reasoning
+? Enable extended thinking? (no): no
+
+Step 6: Avatar
+? Custom avatar URL? (no): no
+Using auto-generated avatar.
+
+Step 7: LLM Override
 ? Use different LLM than project default? (no): yes
 ? Provider: OpenAI
 ? Model: gpt-4o
 ? API key: sk-xxxxxxx
 
-Step 6: Skills
+Step 8: Skills
 Available skills:
   1. knowledge-base - Company knowledge base
   2. escalation-policy - Escalation procedures
   3. faq-responses - Common FAQ answers
 ? Assign skills (comma-separated): 1, 2
 
-Step 7: MCP Servers
+Step 9: MCP Servers
 Available servers:
   1. zendesk - Zendesk ticket management
   2. slack - Slack messaging
 ? Assign MCP servers (comma-separated): 1, 2
 
-Step 8: Platform Tools
+Step 10: Platform Tools
 ? Enable Tavily search? (no): no
 
-Step 9: Created!
+Step 11: Created!
 Agent "support-agent" created for "My AI App"
 
 Summary:

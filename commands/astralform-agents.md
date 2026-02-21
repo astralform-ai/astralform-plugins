@@ -21,7 +21,7 @@ List and manage agents configured for your Astralform projects.
    - Otherwise, call `astralform_list_projects` and let user choose
 
 3. **List agents** by calling `astralform_list_agents` for the selected project
-   - Display table: name, display_name, is_default, is_enabled, LLM provider/model, skill count, MCP server count
+   - Display table: name, display_name, role (Team Lead if default), is_enabled, thinking, LLM provider/model, skill count, MCP server count
 
 4. **Show agent details** (if user selects one):
    - Call `astralform_get_agent` with agent_id
@@ -39,11 +39,11 @@ Astralform Agents
 
 Project: My AI App (550e8400-...)
 
-| Name          | Display Name    | Default | Enabled | LLM            | Skills | MCP |
-|---------------|-----------------|---------|---------|----------------|--------|-----|
-| default       | Default Agent   | Yes     | Yes     | claude-sonnet  | 2      | 1   |
-| support-agent | Support Agent   | No      | Yes     | gpt-4o         | 3      | 2   |
-| triage        | Triage Bot      | No      | No      | llama-3.3-70b  | 0      | 0   |
+| Name          | Display Name    | Role        | Enabled | Thinking | LLM            | Skills | MCP |
+|---------------|-----------------|-------------|---------|----------|----------------|--------|-----|
+| default       | Default Agent   | Team Lead   | Yes     | Off      | claude-sonnet  | 2      | 1   |
+| support-agent | Support Agent   | Team Member | Yes     | On       | gpt-4o         | 3      | 2   |
+| triage        | Triage Bot      | Team Member | No      | Off      | llama-3.3-70b  | 0      | 0   |
 
 Agent details for "support-agent":
   Description: Handles customer support queries
@@ -60,8 +60,10 @@ To enable/disable: astralform_toggle_agent
 
 ## Notes
 
-- Every project has a default agent that handles unrouted requests
-- The default agent cannot be deleted but can be configured
+- Every project has a default agent (Team Lead) that handles unrouted requests
+- The Team Lead cannot be deleted but can be configured
+- You cannot disable all agents — at least one must remain enabled
+- If Team Lead is disabled, the remaining agent runs standalone without orchestration
 - Disabled agents are skipped during routing
 - Agents can have their own LLM override (provider, model, API key)
 - Skills and MCP servers are assigned per-agent for resource isolation

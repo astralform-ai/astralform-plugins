@@ -23,27 +23,32 @@ Complete guided setup for a new Astralform project, including LLM configuration 
 
 3. **Configure LLM provider**:
    - Call `astralform_list_llm_providers` to show options
-   - Ask user which provider they want (OpenAI, Anthropic, Groq, Ollama, or Platform)
-   - For BYOK providers, ask for API key
+   - Ask user which provider they want (OpenAI, Anthropic, Groq, Ollama Cloud, or Platform)
+   - For providers that require an API key, ask for it
    - Call `astralform_set_llm_config` with their choice
 
-4. **Create API key**:
+4. **Optional: Save key to Model Providers vault**:
+   - Ask "Would you like to save your API key to the Model Providers vault for reuse across projects?"
+   - If yes, call `astralform_set_provider_key` with the provider and API key from step 3
+   - Show key hint confirmation
+
+5. **Create API key**:
    - Ask for key name (default: "Development")
    - Ask for environment (development/production)
    - Call `astralform_create_api_key`
    - **IMPORTANT**: Display the full API key with warning that it won't be shown again
 
-5. **Optional: Configure platform tools**:
+6. **Optional: Configure platform tools**:
    - Ask if they want to enable Tavily search
    - If yes, ask for Tavily API key
    - Call `astralform_update_project_tool`
 
-6. **Optional: Add MCP servers**:
+7. **Optional: Add MCP servers**:
    - Ask if they want to add MCP server integrations
    - Show available templates from `astralform_list_mcp_templates`
    - Guide through configuration
 
-7. **Optional: Enable connectors**:
+8. **Optional: Enable connectors**:
    - Ask "Would you like to enable any connectors (Slack, Notion, GitHub)?"
    - If yes, call `astralform_list_connectors` to show catalog
    - Let user select connectors to enable
@@ -53,23 +58,23 @@ Complete guided setup for a new Astralform project, including LLM configuration 
      - Remote MCP: no credentials needed
    - Call `astralform_enable_connector` for each
 
-8. **Optional: Create agents**:
+9. **Optional: Create agents**:
    - Ask "Would you like to set up a multi-agent system?"
    - If yes, explain that agents are specialized workers routed by a supervisor
    - Guide through creating additional agents with `astralform_create_agent`:
      - Agent name, display name, description
      - System prompt for the agent's specialty
-     - Optional LLM override
+     - Optional LLM override, thinking_enabled, avatar
    - Suggest assigning skills and MCP servers to each agent
 
-9. **Optional: Add skills**:
-   - Ask "Would you like to add custom skills to your agents?"
-   - If yes, show options:
-     - Create from content: provide name + SKILL.md body via `astralform_create_skill`
-     - Import from URL: provide URL to a SKILL.md file via `astralform_create_skill_from_url`
-   - Assign created skills to agents via `astralform_update_agent`
+10. **Optional: Add skills**:
+    - Ask "Would you like to add custom skills to your agents?"
+    - If yes, show options:
+      - Create from content: provide name + SKILL.md body via `astralform_create_skill`
+      - Import from URL: provide URL to a SKILL.md file via `astralform_create_skill_from_url`
+    - Assign created skills to agents via `astralform_update_agent`
 
-10. **Show summary**:
+11. **Show summary**:
     - Project name and ID
     - LLM configuration
     - API key prefix
@@ -100,7 +105,7 @@ Step 3: LLM Configuration
   2. OpenAI (bring your own key)
   3. Anthropic (bring your own key)
   4. Groq (bring your own key)
-  5. Ollama (self-hosted)
+  5. Ollama Cloud (bring your own key)
 
 ? Selection: 2
 ? OpenAI API key: sk-xxxxxxx

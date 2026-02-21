@@ -54,14 +54,14 @@ let apiKey = ProcessInfo.processInfo.environment["ASTRALFORM_API_KEY_PROD"] ?? "
 | High volume | Groq | llama-3.3-70b | Fast, cost-effective |
 | Complex reasoning | Anthropic | claude-opus-4-20250514 | Best reasoning |
 | Code generation | Anthropic | claude-sonnet-4-20250514 | Strong code understanding |
-| Local/private | Ollama | llama3.2 | Data stays on-device |
+| Cloud inference | Ollama Cloud | qwen3.5 | Wide model selection |
 | Budget conscious | Platform | varies | Optimized routing |
 
 #### Model Selection Tips
 1. Start with Claude Sonnet for most use cases
 2. Monitor token usage via analytics
 3. Consider Groq for high-volume, latency-sensitive apps
-4. Use Ollama for privacy-critical applications
+4. Use Ollama Cloud for wide model selection at low cost
 
 ### 3. Token Optimization
 
@@ -220,8 +220,14 @@ Before going live:
 - **Single agent**: Simple Q&A, single-domain apps, low complexity
 - **Multi-agent**: Multiple domains (support + sales), different tool access needs, specialized workflows
 
+#### Agent Toggle Rules
+- You cannot disable all agents — at least one must remain enabled
+- Attempting to disable the last enabled agent returns HTTP 400
+- If the Team Lead (default agent) is disabled but a Team Member remains, the single remaining agent runs standalone without orchestration
+- The Team Lead cannot be deleted, only disabled
+
 #### Architecture Guidelines
-- Use the default agent as the entry point / orchestrator
+- Use the default agent (Team Lead) as the entry point / orchestrator
 - Give each agent a clear, focused description (the supervisor uses this for routing)
 - Use lowercase-with-hyphens naming: `support-agent`, `billing-helper`
 - Consider cheaper/faster models for simple routing agents (e.g., Groq for triage)
