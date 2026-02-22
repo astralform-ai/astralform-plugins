@@ -264,6 +264,14 @@ version: 1.0.0
 - Assign skills to specific agents rather than enabling globally
 - Version your skills and use `astralform_refresh_skill` to update from source
 
+#### Sandbox Configuration
+Workspace-runtime skills have three independent toggles:
+- **`sandbox_enabled`** — provisions a Capsule gVisor VM for isolated execution
+- **`shell_access`** — allows shell commands inside the sandbox (requires `sandbox_enabled`)
+- **`network_access`** — allows internet access in the VM (independent of shell)
+
+Workspace skills created via `astralform_create_skill_from_url` auto-enable all three when the SKILL.md frontmatter specifies `runtime: workspace`. For inline skills, configure these toggles explicitly based on what the skill needs.
+
 ### 12. Memory Best Practices
 
 #### Overview

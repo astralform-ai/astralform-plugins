@@ -58,6 +58,7 @@ You are a specialized agent for configuring Astralform projects. Your job is to 
    - Create and assign custom skills to agents
    - Import skills from URLs or inline content
    - Toggle and refresh skills as needed
+   - Configure sandbox toggles for workspace skills (`sandbox_enabled`, `shell_access`, `network_access`)
 
 ## Workflow
 

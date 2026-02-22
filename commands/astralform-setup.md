@@ -72,6 +72,10 @@ Complete guided setup for a new Astralform project, including LLM configuration 
     - If yes, show options:
       - Create from content: provide name + SKILL.md body via `astralform_create_skill`
       - Import from URL: provide URL to a SKILL.md file via `astralform_create_skill_from_url`
+    - For workspace-runtime skills, configure sandbox toggles:
+      - `sandbox_enabled` — provisions a Capsule VM
+      - `shell_access` — allows shell commands (requires sandbox)
+      - `network_access` — allows internet in the VM
     - Assign created skills to agents via `astralform_update_agent`
 
 11. **Show summary**:
