@@ -2,7 +2,7 @@
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "astralform-plugins",
   "description": "Astralform plugins for Claude Code - manage AI agent projects and development tooling",
-  "version": "1.5.1",
+  "version": "1.0.0",
   "homepage": "https://github.com/astralform-ai/astralform-plugins",
   "repository": "https://github.com/astralform-ai/astralform-plugins.git",
   "owner": {
@@ -13,7 +13,7 @@
     {
       "name": "astralform",
       "description": "Manage Astralform AI agent projects directly from Claude Code - create projects, manage API keys, configure LLMs, and integrate the iOS SDK",
-      "source": "./",
+      "source": "./plugins/astralform",
       "version": "1.5.1",
       "author": {
         "name": "Tony Li",
@@ -26,6 +26,28 @@
       "description": "Data-driven lint plugin with 9 language support, auto-fix integration, and blocking behavior for missing tools",
       "source": "./plugins/lint",
       "version": "2.7.0",
+      "author": {
+        "name": "Tony Li",
+        "email": "atom2ueki@gmail.com"
+      },
+      "category": "development"
+    },
+    {
+      "name": "memory",
+      "description": "Automatic persistent memory for Claude Code - captures learnings across sessions with progressive disclosure and markdown-first storage",
+      "source": "./plugins/memory",
+      "version": "1.0.0",
+      "author": {
+        "name": "Tony Li",
+        "email": "atom2ueki@gmail.com"
+      },
+      "category": "productivity"
+    },
+    {
+      "name": "xcode",
+      "description": "Swift Package Manager build/test commands and Xcode project utilities including project renaming",
+      "source": "./plugins/xcode",
+      "version": "1.0.0",
       "author": {
         "name": "Tony Li",
         "email": "atom2ueki@gmail.com"

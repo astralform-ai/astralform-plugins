@@ -16,7 +16,7 @@ Automatically runs linters after code modifications and provides feedback. Suppo
 Install from the astralform-plugins marketplace:
 
 ```bash
-/plugin marketplace add https://github.com/atom2ueki/astralform-plugins
+/plugin marketplace add https://github.com/astralform-ai/astralform-plugins
 /plugin install lint
 ```
 

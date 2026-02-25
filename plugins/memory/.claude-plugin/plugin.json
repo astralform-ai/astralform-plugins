@@ -1,0 +1,12 @@
+{
+  "name": "memory",
+  "description": "Automatic persistent memory for Claude Code - captures learnings across sessions with progressive disclosure and markdown-first storage",
+  "version": "1.0.0",
+  "author": {
+    "name": "Tony Li",
+    "email": "atom2ueki@gmail.com"
+  },
+  "homepage": "https://github.com/astralform-ai/astralform-plugins/tree/main/plugins/memory",
+  "repository": "https://github.com/astralform-ai/astralform-plugins",
+  "license": "MIT"
+}
