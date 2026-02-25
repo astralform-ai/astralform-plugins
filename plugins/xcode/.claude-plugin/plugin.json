@@ -1,0 +1,12 @@
+{
+  "name": "xcode",
+  "description": "Swift Package Manager build/test commands and Xcode project utilities including project renaming",
+  "version": "1.0.0",
+  "author": {
+    "name": "Tony Li",
+    "email": "atom2ueki@gmail.com"
+  },
+  "homepage": "https://github.com/astralform-ai/astralform-plugins/tree/main/plugins/xcode",
+  "repository": "https://github.com/astralform-ai/astralform-plugins",
+  "license": "MIT"
+}
