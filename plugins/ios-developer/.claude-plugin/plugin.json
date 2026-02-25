@@ -1,0 +1,12 @@
+{
+  "name": "ios-developer",
+  "description": "Comprehensive iOS development expertise with Swift 6+ concurrency, SwiftUI animations, and Swift Evolution tracking",
+  "version": "1.0.0",
+  "author": {
+    "name": "Tony Li",
+    "email": "atom2ueki@gmail.com"
+  },
+  "homepage": "https://github.com/astralform-ai/astralform-plugins/tree/main/plugins/ios-developer",
+  "repository": "https://github.com/astralform-ai/astralform-plugins",
+  "license": "MIT"
+}

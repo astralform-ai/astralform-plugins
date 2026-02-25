@@ -53,6 +53,17 @@
         "email": "atom2ueki@gmail.com"
       },
       "category": "development"
+    },
+    {
+      "name": "ios-developer",
+      "description": "Comprehensive iOS development expertise with Swift 6+ concurrency, SwiftUI animations, and Swift Evolution tracking",
+      "source": "./plugins/ios-developer",
+      "version": "1.0.0",
+      "author": {
+        "name": "Tony Li",
+        "email": "atom2ueki@gmail.com"
+      },
+      "category": "development"
     }
   ]
 }
