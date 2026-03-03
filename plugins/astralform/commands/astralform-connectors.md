@@ -20,7 +20,9 @@ Browse the connector catalog and check which connectors are enabled for your pro
    - Show all available connectors with type, category, and tools count
 
 3. **Show project connector status** (if project_id provided or user selects one):
-   - If no project_id, call `astralform_list_projects` and let user choose
+   - If no project_id:
+     - Call `astralform_list_teams` to show teams
+     - Call `astralform_list_projects` and let user choose (grouped by team)
    - Call `astralform_list_project_connectors` for the selected project
    - Display enabled connectors with their status
 

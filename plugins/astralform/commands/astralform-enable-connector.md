@@ -21,7 +21,9 @@ Interactive wizard to enable a connector (Slack, Notion, GitHub, etc.) for an As
 
 2. **Select project**:
    - If `project_id` provided, call `astralform_get_project` to verify
-   - Otherwise, call `astralform_list_projects` and let user choose
+   - Otherwise:
+     - Call `astralform_list_teams` to show teams
+     - Call `astralform_list_projects` and let user choose (grouped by team)
 
 3. **Select connector**:
    - If `connector_slug` provided, call `astralform_get_connector` to verify
@@ -72,6 +74,7 @@ Step 1: Authentication
 Logged in as tony@example.com
 
 Step 2: Project
+Team: My Team (my-team)
 ? Select project: My AI App (550e8400-...)
 
 Step 3: Connector

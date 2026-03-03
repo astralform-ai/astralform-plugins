@@ -18,7 +18,10 @@ List and manage agents configured for your Astralform projects.
 
 2. **Select project**:
    - If `project_id` provided, call `astralform_get_project` to verify
-   - Otherwise, call `astralform_list_projects` and let user choose
+   - Otherwise:
+     - Call `astralform_list_teams` to show teams
+     - Call `astralform_list_projects` to list projects (grouped by team)
+     - Let user choose a project
 
 3. **List agents** by calling `astralform_list_agents` for the selected project
    - Display table: name, display_name, role (Team Lead if default), is_enabled, thinking, LLM provider/model, skill count, MCP server count
@@ -37,6 +40,7 @@ List and manage agents configured for your Astralform projects.
 ```
 Astralform Agents
 
+Team: My Team (my-team)
 Project: My AI App (550e8400-...)
 
 | Name          | Display Name    | Role        | Enabled | Thinking | LLM            | Skills | MCP |

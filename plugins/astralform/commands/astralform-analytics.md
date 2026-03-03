@@ -21,7 +21,9 @@ View usage analytics and statistics for Astralform projects.
 
 2. **Select project**:
    - If `project_name` provided, use it
-   - Otherwise, call `astralform_list_projects` and ask user to choose
+   - Otherwise:
+     - Call `astralform_list_teams` to show teams
+     - Call `astralform_list_projects` and ask user to choose (grouped by team)
 
 3. **Get analytics** using `astralform_get_analytics`
    - Pass project_id and date range based on period
@@ -36,10 +38,9 @@ View usage analytics and statistics for Astralform projects.
 ## Example Output
 
 ```
-📊 Analytics for "My AI App"
+Analytics for "My AI App"
+Team: My Team (my-team)
 Period: Last 7 days (Jan 21 - Jan 28, 2025)
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Overview:
   Conversations: 156
@@ -54,15 +55,13 @@ Tool Usage:
   Client tools: 23 calls
 
 Daily Activity:
-  Jan 21 ████████████ 142 messages
-  Jan 22 ████████████████ 198 messages
-  Jan 23 ██████████████████████ 267 messages
-  Jan 24 ██████████████████ 223 messages
-  Jan 25 ████████████████████ 245 messages
-  Jan 26 ████████ 98 messages
-  Jan 27 ██████ 74 messages
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Jan 21 ############ 142 messages
+  Jan 22 ################ 198 messages
+  Jan 23 ###################### 267 messages
+  Jan 24 ################## 223 messages
+  Jan 25 #################### 245 messages
+  Jan 26 ######## 98 messages
+  Jan 27 ###### 74 messages
 
 Tip: Use astralform_get_analytics with custom date ranges for more control.
 ```

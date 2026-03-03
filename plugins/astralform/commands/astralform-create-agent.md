@@ -21,7 +21,10 @@ Interactive wizard to create a new specialized agent for an Astralform project.
 
 2. **Select project**:
    - If `project_id` provided, call `astralform_get_project` to verify
-   - Otherwise, call `astralform_list_projects` and let user choose
+   - Otherwise:
+     - Call `astralform_list_teams` to show teams
+     - Call `astralform_list_projects` to list projects (grouped by team)
+     - Let user choose a project
 
 3. **Agent identity**:
    - Ask for agent name (lowercase letters, numbers, hyphens only)
@@ -58,12 +61,12 @@ Interactive wizard to create a new specialized agent for an Astralform project.
    - Each server provides tools the agent can use
 
 10. **Optional: Assign platform tools**:
-   - Call `astralform_list_platform_tools` to show available tools
-   - Let user select which platform tools to enable (e.g., Tavily search)
+    - Call `astralform_list_platform_tools` to show available tools
+    - Let user select which platform tools to enable (e.g., Tavily search)
 
 11. **Create agent**:
-   - Call `astralform_create_agent` with all collected configuration
-   - Display confirmation with full agent summary
+    - Call `astralform_create_agent` with all collected configuration
+    - Display confirmation with full agent summary
 
 12. **Show next steps**:
     - Explain how routing works (supervisor directs to agents by name)
@@ -79,6 +82,7 @@ Step 1: Authentication
 Logged in as tony@example.com
 
 Step 2: Project
+Team: My Team (my-team)
 ? Select project: My AI App (550e8400-...)
 
 Step 3: Agent Identity
