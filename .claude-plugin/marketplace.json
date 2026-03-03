@@ -2,7 +2,7 @@
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "astralform-plugins",
   "description": "Astralform plugins for Claude Code - manage AI agent projects and development tooling",
-  "version": "1.6.0",
+  "version": "1.0.0",
   "homepage": "https://github.com/astralform-ai/astralform-plugins",
   "repository": "https://github.com/astralform-ai/astralform-plugins.git",
   "owner": {
