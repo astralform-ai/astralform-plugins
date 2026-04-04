@@ -14,7 +14,7 @@ Browse the connector catalog and check which connectors are enabled for your pro
 ## Steps
 
 1. **Check authentication** by calling `astralform_whoami`
-   - If not authenticated, guide user through device flow
+   - If not authenticated, explain that Claude Code will auto-authenticate on the next MCP tool call
 
 2. **List connector catalog** by calling `astralform_list_connectors`
    - Show all available connectors with type, category, and tools count

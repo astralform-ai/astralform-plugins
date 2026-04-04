@@ -17,7 +17,7 @@ Interactive wizard to enable a connector (Slack, Notion, GitHub, etc.) for an As
 ## Steps
 
 1. **Check authentication** by calling `astralform_whoami`
-   - If not authenticated, guide user through device flow
+   - If not authenticated, explain that Claude Code will auto-authenticate on the next MCP tool call
 
 2. **Select project**:
    - If `project_id` provided, call `astralform_get_project` to verify

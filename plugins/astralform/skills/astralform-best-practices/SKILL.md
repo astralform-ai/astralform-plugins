@@ -264,13 +264,20 @@ version: 1.0.0
 - Assign skills to specific agents rather than enabling globally
 - Version your skills and use `astralform_refresh_skill` to update from source
 
-#### Sandbox Configuration
-Workspace-runtime skills have three independent toggles:
-- **`sandbox_enabled`** — provisions a Capsule gVisor VM for isolated execution
-- **`shell_access`** — allows shell commands inside the sandbox (requires `sandbox_enabled`)
-- **`network_access`** — allows internet access in the VM (independent of shell)
+#### Auto-Capsule
+Agents with non-system skills automatically get a Capsule sandbox with network access — no manual configuration needed. The sandbox is provisioned on the first agent turn and shared across all agents in the conversation via a `/workspace` filesystem.
 
-Workspace skills created via `astralform_create_skill_from_url` auto-enable all three when the SKILL.md frontmatter specifies `runtime: workspace`. For inline skills, configure these toggles explicitly based on what the skill needs.
+Configurable per agent:
+- **`sandbox_template`** — base (default), browser (Chromium), code-interpreter-v1 (Jupyter), desktop (VNC)
+- **`sandbox_envs`** — encrypted environment variables injected into the sandbox
+- **`temperature`** — LLM temperature (0.0-2.0)
+- **`thinking_effort`** — thinking depth: low, medium, or high
+
+#### Workspace
+All agents in a conversation share a `/workspace` filesystem (backed by MinIO S3 via rclone FUSE):
+- `/workspace/attachments/` — user-uploaded files staged by AttachmentMiddleware
+- `/workspace/outputs/` — agent deliverables exported via `export_file` tool (creates signed download URLs)
+- `/workspace/todo.md` — task tracking via `write_todos`/`read_todos` tools
 
 ### 12. Memory Best Practices
 

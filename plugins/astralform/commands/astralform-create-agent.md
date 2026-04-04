@@ -17,7 +17,7 @@ Interactive wizard to create a new specialized agent for an Astralform project.
 ## Steps
 
 1. **Check authentication** by calling `astralform_whoami`
-   - If not authenticated, guide user through device flow
+   - If not authenticated, explain that Claude Code will auto-authenticate on the next MCP tool call
 
 2. **Select project**:
    - If `project_id` provided, call `astralform_get_project` to verify
@@ -55,20 +55,15 @@ Interactive wizard to create a new specialized agent for an Astralform project.
    - Let user select which skills to assign to this agent
    - Skills give the agent domain-specific knowledge
 
-9. **Optional: Assign MCP servers**:
-   - Call `astralform_list_mcp_servers` to show available servers
-   - Let user select which MCP servers this agent can access
-   - Each server provides tools the agent can use
+9. **Optional: Assign connectors**:
+   - Call `astralform_list_project_connectors` to show enabled connectors
+   - Let user select which connectors this agent can access
 
-10. **Optional: Assign platform tools**:
-    - Call `astralform_list_platform_tools` to show available tools
-    - Let user select which platform tools to enable (e.g., Tavily search)
-
-11. **Create agent**:
+10. **Create agent**:
     - Call `astralform_create_agent` with all collected configuration
     - Display confirmation with full agent summary
 
-12. **Show next steps**:
+11. **Show next steps**:
     - Explain how routing works (supervisor directs to agents by name)
     - Mention `astralform_update_agent` for future changes
     - Suggest testing with a chat session
@@ -115,16 +110,13 @@ Available skills:
   3. faq-responses - Common FAQ answers
 ? Assign skills (comma-separated): 1, 2
 
-Step 9: MCP Servers
-Available servers:
+Step 9: Connectors
+Enabled connectors:
   1. zendesk - Zendesk ticket management
   2. slack - Slack messaging
-? Assign MCP servers (comma-separated): 1, 2
+? Assign connectors (comma-separated): 1, 2
 
-Step 10: Platform Tools
-? Enable Tavily search? (no): no
-
-Step 11: Created!
+Step 10: Created!
 Agent "support-agent" created for "My AI App"
 
 Summary:
@@ -132,7 +124,7 @@ Summary:
   Display Name: Support Agent
   LLM: OpenAI gpt-4o (override)
   Skills: knowledge-base, escalation-policy
-  MCP Servers: zendesk, slack
+  Connectors: zendesk, slack
 
 Next steps:
 1. The supervisor will route relevant queries to this agent

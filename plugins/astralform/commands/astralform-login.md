@@ -5,49 +5,38 @@ description: Authenticate with Astralform to manage your AI agent projects
 
 # Astralform Login
 
-You are helping the user authenticate with Astralform using OAuth Device Flow.
+Check authentication status with Astralform.
+
+## How Authentication Works
+
+The Astralform plugin uses **MCP OAuth** — authentication is handled automatically by Claude Code when you first use any Astralform MCP tool. Claude Code discovers the OAuth server via `https://mcp.astralform.ai/.well-known/oauth-authorization-server` and opens a browser for login.
+
+There is no manual device code flow. If you see an authentication error, Claude Code will prompt you to re-authenticate.
 
 ## Steps
 
-1. **Start the authentication flow** by calling the `astralform_device_code` MCP tool.
+1. **Check authentication status** by calling `astralform_whoami`.
 
-2. **Display the login instructions** to the user:
-   - Show the verification URL (e.g., `https://astralform.ai/device`)
-   - Show the user code they need to enter
-   - Remind them they have a limited time (usually 15 minutes)
+2. **If authenticated**:
+   - Show the user's email and name
+   - Confirm they're ready to use Astralform tools
 
-3. **Wait for authentication** by polling with `astralform_device_token` tool:
-   - Poll every 5 seconds
-   - Handle `authorization_pending` by continuing to poll
-   - Handle `slow_down` by increasing the interval
-   - Handle `expired_token` by restarting the flow
-   - Handle `access_denied` by informing the user
-
-4. **On success**:
-   - The token is automatically stored at `~/.astralform/credentials.json`
-   - Confirm the user is logged in
-   - Show their email/name from `astralform_whoami`
-
-5. **On failure**:
-   - Explain what went wrong
-   - Offer to restart the flow
+3. **If not authenticated**:
+   - Explain that Claude Code will automatically open a browser for OAuth login on the next MCP tool call
+   - Suggest calling `astralform_whoami` to trigger the auth flow
+   - After auth completes, confirm with `astralform_whoami`
 
 ## Example Output
 
 ```
-Starting Astralform authentication...
+Checking Astralform authentication...
 
-Please visit: https://astralform.ai/device
-And enter code: ABCD-1234
-
-Waiting for authentication...
-
-Successfully logged in as tony@example.com
-Your credentials have been saved to ~/.astralform/credentials.json
+Logged in as tony@example.com
+You're ready to manage your Astralform projects.
 ```
 
 ## Notes
 
-- If already logged in, ask if they want to re-authenticate
-- Credentials are stored locally and never sent anywhere except Astralform APIs
-- Token will be refreshed automatically when expired
+- Authentication is automatic via MCP OAuth — no manual token handling needed
+- If auth expires, Claude Code re-authenticates automatically on the next tool call
+- Credentials are managed by Claude Code, not stored in local files

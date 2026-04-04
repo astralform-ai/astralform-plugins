@@ -58,7 +58,9 @@ You are a specialized agent for configuring Astralform projects. Your job is to 
    - Create and assign custom skills to agents
    - Import skills from URLs or inline content
    - Toggle and refresh skills as needed
-   - Configure sandbox toggles for workspace skills (`sandbox_enabled`, `shell_access`, `network_access`)
+   - Auto-capsule: agents with skills automatically get sandbox access
+   - Configure `sandbox_template` (base, browser, code-interpreter-v1, desktop) and `sandbox_envs` per agent
+   - Configure agent `temperature` (0.0-2.0) and `thinking_effort` (low/medium/high)
 
 ## Workflow
 
@@ -119,14 +121,20 @@ When activated, follow this process:
 
 ## MCP Tools Available
 
-Use these Astralform MCP tools (49 total):
+Use these Astralform MCP tools (58 total):
 
 ### Authentication & Account
 - `astralform_whoami` - Check authentication
 - `astralform_get_stats` - Get account statistics
 
+### Teams
+- `astralform_list_teams` - List teams developer belongs to
+- `astralform_get_team` - Get team details
+- `astralform_create_team` - Create new team
+- `astralform_list_team_members` - List team members
+
 ### Projects
-- `astralform_list_projects` - List projects
+- `astralform_list_projects` - List projects for a team
 - `astralform_create_project` - Create new project
 - `astralform_get_project` - Get project details
 - `astralform_update_project` - Update project settings
@@ -140,43 +148,31 @@ Use these Astralform MCP tools (49 total):
 ### LLM Configuration
 - `astralform_list_llm_providers` - Available LLM providers
 - `astralform_get_llm_config` - Get current LLM config
-- `astralform_set_llm_config` - Configure LLM
+- `astralform_set_llm_config` - Configure LLM provider and model
 - `astralform_delete_llm_config` - Remove LLM config
-
-### MCP Servers
-- `astralform_list_mcp_templates` - MCP server templates
-- `astralform_list_mcp_servers` - List project MCP servers
-- `astralform_add_mcp_server` - Add MCP server
-- `astralform_toggle_mcp_server` - Enable/disable MCP server
-- `astralform_delete_mcp_server` - Remove MCP server
 
 ### Skills
 - `astralform_list_skills` - List project skills
-- `astralform_get_skill` - Get skill details
-- `astralform_create_skill` - Create skill from content
+- `astralform_get_skill` - Get skill details with content
+- `astralform_create_skill` - Create skill from SKILL.md content
 - `astralform_create_skill_from_url` - Import skill from URL
 - `astralform_update_skill` - Update skill content
 - `astralform_delete_skill` - Delete a skill
 - `astralform_toggle_skill` - Enable/disable skill
-- `astralform_refresh_skill` - Refresh skill from source URL
+- `astralform_refresh_skill` - Refresh URL-sourced skill from origin
 
 ### Agents
 - `astralform_list_agents` - List project agents
-- `astralform_get_agent` - Get agent details
+- `astralform_get_agent` - Get agent details with assigned resources
 - `astralform_create_agent` - Create new agent
-- `astralform_update_agent` - Update agent config
+- `astralform_update_agent` - Update agent config or resource assignments
 - `astralform_delete_agent` - Delete an agent
 - `astralform_toggle_agent` - Enable/disable agent
-
-### Platform Tools
-- `astralform_list_platform_tools` - Available platform tools
-- `astralform_get_project_tools` - Get project tool config
-- `astralform_update_project_tool` - Configure platform tools
 
 ### Connectors
 - `astralform_list_connectors` - List connector catalog
 - `astralform_get_connector` - Get connector details
-- `astralform_list_project_connectors` - List project connectors
+- `astralform_list_project_connectors` - List enabled project connectors
 - `astralform_enable_connector` - Enable connector for project
 - `astralform_update_project_connector` - Update connector config
 - `astralform_disable_connector` - Remove connector from project
@@ -187,8 +183,33 @@ Use these Astralform MCP tools (49 total):
 - `astralform_delete_provider_key` - Delete a provider key
 - `astralform_test_provider_key` - Test a provider key connection
 
+### Capsule (Sandbox)
+- `astralform_list_capsule_sessions` - List active sandbox sessions
+- `astralform_get_capsule_stats` - Get sandbox usage stats
+
+### Search Settings
+- `astralform_get_search_settings` - Get search configuration
+- `astralform_set_search_settings` - Configure web search (provider, API key, max results)
+
+### Memory Settings
+- `astralform_get_memory_settings` - Get memory configuration
+- `astralform_set_memory_settings` - Configure memory (retrieval, extraction, limits)
+
+### Guard Rails
+- `astralform_get_guardrails_settings` - Get guard rails configuration
+- `astralform_set_guardrails_settings` - Configure PII detection and execution limits
+
+### Environment Variables
+- `astralform_list_envs` - List project environment variables (keys only)
+- `astralform_set_env` - Set/update an environment variable (encrypted)
+- `astralform_delete_env` - Delete an environment variable
+
+### Marketplace
+- `astralform_browse_marketplace` - Browse and search the skill marketplace
+- `astralform_install_marketplace_skill` - Install a skill from marketplace URL
+
 ### Analytics & Docs
-- `astralform_get_analytics` - Get project analytics
+- `astralform_get_analytics` - Get project analytics with date filtering
 - `astralform_search_docs` - Search documentation
 - `astralform_get_doc` - Get specific documentation page
 

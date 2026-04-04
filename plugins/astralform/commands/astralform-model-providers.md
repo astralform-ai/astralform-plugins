@@ -14,7 +14,7 @@ Manage your model provider API keys stored in the Astralform vault. Keys are enc
 ## Steps
 
 1. **Check authentication** by calling `astralform_whoami`
-   - If not authenticated, guide user through device flow
+   - If not authenticated, explain that Claude Code will auto-authenticate on the next MCP tool call
 
 2. **List current keys** by calling `astralform_list_provider_keys`
    - Display table: provider, display name, key hint, base URL
