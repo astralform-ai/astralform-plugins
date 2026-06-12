@@ -45,14 +45,22 @@ Install from the astralform-plugins marketplace:
 | Command | Description |
 |---------|-------------|
 | `/astralform-login` | Authenticate with your Astralform account |
-| `/astralform-projects` | List all your projects |
+| `/astralform-projects` | List, inspect, update, or delete your projects |
 | `/astralform-create-project` | Create a new project with guided setup |
 | `/astralform-setup` | Interactive setup wizard for complete configuration |
+| `/astralform-api-keys` | List, create, and revoke project API keys |
 | `/astralform-agents` | List and manage agents for a project |
 | `/astralform-create-agent` | Create a new agent with guided configuration |
-| `/astralform-connectors` | Browse connector catalog and view status |
+| `/astralform-skills` | List and manage skills for a project |
+| `/astralform-marketplace` | Browse the skill marketplace and install skills |
+| `/astralform-connectors` | Browse connector catalog and view/update status |
 | `/astralform-enable-connector` | Enable a connector for your project |
 | `/astralform-model-providers` | Manage LLM provider API keys in the vault |
+| `/astralform-capsule` | View Capsule sandbox sessions and usage stats |
+| `/astralform-search` | View or configure web search settings |
+| `/astralform-memory-settings` | View or configure agent memory settings |
+| `/astralform-guardrails` | View or configure project guardrails |
+| `/astralform-envs` | Manage project environment variables |
 | `/astralform-analytics` | View project usage analytics |
 
 ## Agent
@@ -81,11 +89,12 @@ Astralform integration best practices and optimization tips. Covers security, pe
 
 ## MCP Server
 
-This plugin connects to the Astralform MCP server at `https://mcp.astralform.ai/mcp`, providing access to 40+ tools for managing:
-- Projects and API keys
-- LLM configurations
+This plugin connects to the Astralform MCP server at `https://mcp.astralform.ai/mcp`, providing access to 58 tools for managing:
+- Teams, projects, and API keys
+- LLM configurations and provider vault keys
 - MCP servers and connectors
-- Agents and skills
+- Agents, skills, and the skill marketplace
+- Capsule sandbox sessions, search/memory/guardrail settings, envs
 - Analytics and documentation
 
 ## Plugin Structure
@@ -101,11 +110,19 @@ astralform/
 │   ├── astralform-projects.md
 │   ├── astralform-create-project.md
 │   ├── astralform-setup.md
+│   ├── astralform-api-keys.md
 │   ├── astralform-agents.md
 │   ├── astralform-create-agent.md
+│   ├── astralform-skills.md
+│   ├── astralform-marketplace.md
 │   ├── astralform-connectors.md
 │   ├── astralform-enable-connector.md
 │   ├── astralform-model-providers.md
+│   ├── astralform-capsule.md
+│   ├── astralform-search.md
+│   ├── astralform-memory-settings.md
+│   ├── astralform-guardrails.md
+│   ├── astralform-envs.md
 │   └── astralform-analytics.md
 ├── skills/
 │   ├── astralform-docs/
