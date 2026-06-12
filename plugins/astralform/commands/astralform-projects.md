@@ -29,7 +29,7 @@ developer, organized by team.
 6. **Manage the selected project** based on what the user wants:
    - **Rename / reconfigure**: `astralform_update_project` with project_id and changed fields
    - **Delete**: `astralform_delete_project` with project_id (confirm first — this is
-     destructive and removes agents, keys, and conversations for that project)
+     destructive and removes agents, API keys, skills, and conversations for that project)
 
 ## Example Output
 

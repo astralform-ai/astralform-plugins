@@ -25,7 +25,7 @@ reusable capability bundles (SKILL.md + references) that agents can activate.
      - Let user choose a project
 
 3. **List skills** by calling `astralform_list_skills` for the selected project
-   - Display table: name, display_name, enabled status, version, source (manual / from-url), sandbox_enabled
+   - Display table: name, display_name, enabled status, version, source (manual / from-url)
 
 4. **Show skill details** (if user selects one):
    - Call `astralform_get_skill` with skill_id
@@ -48,11 +48,11 @@ reusable capability bundles (SKILL.md + references) that agents can activate.
 ```
 Astralform Skills — "My AI App"
 
-| Name          | Enabled | Version | Source    | Sandbox |
-|---------------|---------|---------|-----------|---------|
-| pdf-extract   | Yes     | 1.2.0   | from-url  | Yes     |
-| web-research  | Yes     | 0.4.0   | manual    | No      |
-| invoice-parse | No      | 1.0.0   | manual    | Yes     |
+| Name          | Enabled | Version | Source    |
+|---------------|---------|---------|-----------|
+| pdf-extract   | Yes     | 1.2.0   | from-url  |
+| web-research  | Yes     | 0.4.0   | manual    |
+| invoice-parse | No      | 1.0.0   | manual    |
 
 3 skills (2 enabled).
 

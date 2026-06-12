@@ -42,14 +42,14 @@ Astralform project.
 ```
 Astralform API Keys — "My AI App"
 
-| Name        | Prefix       | Created     | Last Used   | Status  |
-|-------------|--------------|-------------|-------------|---------|
-| ios-prod    | sk_live_a1…  | 2026-05-01  | 2026-06-12  | active  |
-| ci-test     | sk_test_9f…  | 2026-05-20  | 2026-06-10  | active  |
-| old-laptop  | sk_live_3c…  | 2026-01-02  | 2026-03-15  | revoked |
+| Name        | Prefix         | Created     | Last Used   | Status  |
+|-------------|----------------|-------------|-------------|---------|
+| ios-prod    | sk_a1B2c3D4e…  | 2026-05-01  | 2026-06-12  | active  |
+| ci-test     | sk_9fE8d7C6b…  | 2026-05-20  | 2026-06-10  | active  |
+| old-laptop  | sk_3cF4a5B6c…  | 2026-01-02  | 2026-03-15  | revoked |
 
 Created key "staging":
-  sk_live_<full-secret-shown-here-once>
+  sk_<full-secret-shown-here-once>
   ^ Store this now — it will not be shown again.
 ```
 

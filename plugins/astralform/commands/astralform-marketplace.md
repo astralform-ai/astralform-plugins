@@ -5,6 +5,9 @@ arguments:
   - name: query
     description: Optional search term to filter the marketplace catalog
     required: false
+  - name: project_id
+    description: Project UUID to install the skill into (optional — skips project selection)
+    required: false
 ---
 
 # Astralform Marketplace
@@ -25,8 +28,10 @@ directly into one of your projects.
    - Show the full description, included references, and required connectors/sandbox
 
 4. **Select the target project**:
-   - Call `astralform_list_teams` to show teams
-   - Call `astralform_list_projects` and let the user choose (grouped by team)
+   - If `project_id` was provided, call `astralform_get_project` to verify and skip selection
+   - Otherwise:
+     - Call `astralform_list_teams` to show teams
+     - Call `astralform_list_projects` and let the user choose (grouped by team)
 
 5. **Install** by calling `astralform_install_marketplace_skill` with the marketplace
    slug and the target project_id

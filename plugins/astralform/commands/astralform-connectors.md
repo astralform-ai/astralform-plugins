@@ -1,6 +1,6 @@
 ---
 name: astralform-connectors
-description: Browse connector catalog and view project connector status
+description: Browse connector catalog and view or update project connector configuration
 arguments:
   - name: project_id
     description: Project UUID to check connectors for (optional)
