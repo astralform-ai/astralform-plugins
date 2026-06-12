@@ -1,6 +1,6 @@
 ---
 name: astralform-connectors
-description: Browse connector catalog and view project connector status
+description: Browse connector catalog and view or update project connector configuration
 arguments:
   - name: project_id
     description: Project UUID to check connectors for (optional)
@@ -30,6 +30,12 @@ Browse the connector catalog and check which connectors are enabled for your pro
    - Show a table with: name, slug, type, category, enabled status, tools count
    - Highlight which connectors are enabled vs available
    - Suggest `/astralform-enable-connector` for connectors they want to add
+
+5. **Reconfigure an enabled connector** (if the user wants to change credentials,
+   scopes, or which tools are exposed):
+   - Call `astralform_update_project_connector` with the project_id and connector
+     slug plus the changed config
+   - To turn one off entirely, use `astralform_disable_connector`
 
 ## Example Output
 
