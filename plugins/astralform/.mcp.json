@@ -1,8 +1,0 @@
-{
-  "mcpServers": {
-    "astralform": {
-      "type": "http",
-      "url": "https://mcp.astralform.ai/mcp"
-    }
-  }
-}

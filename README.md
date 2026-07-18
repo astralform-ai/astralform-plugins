@@ -6,10 +6,12 @@ A collection of plugins for [Claude Code](https://claude.ai/code) to enhance you
 
 | Plugin | Description | Version |
 |--------|-------------|---------|
-| [astralform](./plugins/astralform) | Manage Astralform AI agent projects - create projects, manage API keys, configure LLMs, integrate iOS SDK | 1.5.1 |
 | [lint](./plugins/lint) | Auto-linting for 9 languages with auto-fix integration and blocking behavior for missing tools | 2.7.0 |
 | [memory](./plugins/memory) | Automatic persistent memory - captures learnings across sessions with progressive disclosure | 1.0.0 |
 | [xcode](./plugins/xcode) | Swift Package Manager build/test commands and Xcode project utilities | 1.0.0 |
+| [ios-developer](./plugins/ios-developer) | iOS development expertise - Swift 6+ concurrency, SwiftUI animations, and Swift Evolution tracking | 1.0.0 |
+
+> **Looking for Astralform project management?** It's now a self-serve **Claude connector**, not a plugin — add `https://mcp.astralform.ai/mcp` in Claude under Customize → Connectors. See the [connector docs](https://docs.astralform.ai/plugin/connect).
 
 ## Installation
 
@@ -30,27 +32,10 @@ claude plugins add --global https://github.com/astralform-ai/astralform-plugins
 
 ```bash
 /plugin marketplace add https://github.com/astralform-ai/astralform-plugins
-/plugin install astralform  # or lint, memory, xcode
+/plugin install lint  # or memory, xcode, ios-developer
 ```
 
 ## Plugin Details
-
-### Astralform
-
-Manage your [Astralform](https://astralform.ai) AI agent projects directly from Claude Code.
-
-**Quick Start:**
-```
-/astralform-login
-/astralform-setup
-```
-
-**Features:**
-- Project management (create, configure, delete)
-- API key generation and management
-- LLM configuration (OpenAI, Anthropic, Groq, Ollama Cloud)
-- MCP server and connector configuration
-- iOS SDK automated setup
 
 ### Lint
 
@@ -97,6 +82,15 @@ Swift Package Manager build/test commands and Xcode project utilities.
 - Run tests with filtering and coverage
 - Xcode project renaming utility
 
+### iOS Developer
+
+Full-stack iOS development expertise for Swift, SwiftUI, and UIKit.
+
+**Features:**
+- Swift 6+ concurrency (async/await, actors, Sendable)
+- SwiftUI animation patterns
+- Swift Evolution proposal tracking
+
 ## Repository Structure
 
 ```
@@ -104,10 +98,10 @@ astralform-plugins/
 ├── .claude-plugin/
 │   └── marketplace.json     # Marketplace catalog
 ├── plugins/
-│   ├── astralform/          # Astralform management plugin
 │   ├── lint/                # Multi-language linting plugin
 │   ├── memory/              # Persistent memory plugin
-│   └── xcode/               # Xcode/SPM utilities plugin
+│   ├── xcode/               # Xcode/SPM utilities plugin
+│   └── ios-developer/       # iOS development expertise plugin
 ├── CLAUDE.md                # Project instructions
 ├── LICENSE
 └── README.md
@@ -116,14 +110,13 @@ astralform-plugins/
 ## Requirements
 
 - [Claude Code](https://claude.ai/code) CLI 1.0.33 or later
-- For astralform: An [Astralform](https://astralform.ai) account
 - For lint: Language-specific linters (ESLint, Ruff, SwiftLint, etc.)
-- For xcode: Swift 5.9+ / Xcode 15+
+- For xcode / ios-developer: Swift 5.9+ / Xcode 15+
 
 ## Documentation
 
 - [Astralform Docs](https://docs.astralform.ai)
-- [iOS SDK Guide](https://docs.astralform.ai/ios-sdk)
+- [Connect Astralform to Claude](https://docs.astralform.ai/plugin/connect)
 
 ## License
 
