@@ -11,7 +11,7 @@ A collection of plugins for [Claude Code](https://claude.ai/code) to enhance you
 | [xcode](./plugins/xcode) | Swift Package Manager build/test commands and Xcode project utilities | 1.0.0 |
 | [ios-developer](./plugins/ios-developer) | iOS development expertise - Swift 6+ concurrency, SwiftUI animations, and Swift Evolution tracking | 1.0.0 |
 
-> **Looking for Astralform project management?** It's now a self-serve **Claude connector**, not a plugin — add `https://mcp.astralform.ai/mcp` in Claude under Customize → Connectors. See the [connector docs](https://docs.astralform.ai/plugin/connect).
+> **Looking for Astralform project management?** It's now a self-serve **Claude connector**, not a plugin — add `https://mcp.astralform.ai/mcp` in Claude under Customize → Connectors. See the [connector docs](https://astralform.mintlify.app/plugin/connect).
 
 ## Installation
 
@@ -115,8 +115,8 @@ astralform-plugins/
 
 ## Documentation
 
-- [Astralform Docs](https://docs.astralform.ai)
-- [Connect Astralform to Claude](https://docs.astralform.ai/plugin/connect)
+- [Astralform Docs](https://astralform.mintlify.app)
+- [Connect Astralform to Claude](https://astralform.mintlify.app/plugin/connect)
 
 ## License
 
