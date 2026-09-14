@@ -59,7 +59,8 @@
           "name": "Black",
           "binary": "black",
           "command": "black {file}",
-          "config_files": ["pyproject.toml", "setup.cfg", ".black", "tox.ini"],
+          "config_files": ["pyproject.toml"],
+          "config_sections": {"pyproject.toml": "[tool.black]"},
           "docs": "https://black.readthedocs.io/en/stable/usage_and_configuration/",
           "install": {"pip": "black", "pipx": "black", "pip3": "black"}
         },

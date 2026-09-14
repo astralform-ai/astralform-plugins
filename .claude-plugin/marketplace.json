@@ -14,7 +14,7 @@
       "name": "lint",
       "description": "Data-driven lint plugin with 9 language support, auto-fix integration, and blocking behavior for missing tools",
       "source": "./plugins/lint",
-      "version": "2.7.0",
+      "version": "2.7.1",
       "author": {
         "name": "Tony Li",
         "email": "atom2ueki@gmail.com"

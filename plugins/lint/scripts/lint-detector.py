@@ -130,6 +130,32 @@ def check_binary_availability(linter_config: Dict) -> Tuple[bool, Optional[str]]
     return False, f"Install {linter_config['name']} manually"
 
 
+def is_configured(project_root: str, linter_config: Dict) -> bool:
+    """
+    Check if the project configures this linter.
+
+    A config file counts by existing, unless ``config_sections`` names a section
+    for it: a file many tools share (``pyproject.toml``) only counts when it holds
+    this linter's own section. Otherwise every Python project "configures" black,
+    which then reformats after ruff at its own defaults.
+    """
+    sections = linter_config.get("config_sections", {})
+    for cfg in linter_config["config_files"]:
+        path = os.path.join(project_root, cfg)
+        if not os.path.exists(path):
+            continue
+        section = sections.get(cfg)
+        if section is None:
+            return True
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                if any(line.strip().startswith(section) for line in f):
+                    return True
+        except (OSError, UnicodeDecodeError):
+            continue
+    return False
+
+
 def scan_project_linters(project_root: str, language: str, config: Dict) -> Dict:
     """
     Scan project and check linter availability.
@@ -144,11 +170,7 @@ def scan_project_linters(project_root: str, language: str, config: Dict) -> Dict
     result = {"configured": [], "available": [], "missing": [], "install_commands": {}}
 
     for linter_name, linter_config in lang_config.get("linters", {}).items():
-        # Check if configured
-        if any(
-            os.path.exists(os.path.join(project_root, cfg))
-            for cfg in linter_config["config_files"]
-        ):
+        if is_configured(project_root, linter_config):
             result["configured"].append(linter_name)
 
             # Check binary availability

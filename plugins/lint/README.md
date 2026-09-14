@@ -100,6 +100,8 @@ The plugin automatically detects your project's linter configuration by scanning
 2. **Configuration files** in your project root (see table above for each language's supported files)
 3. **Project structure** with standard layout
 
+A linter whose config lives in a file many tools share runs only when that file holds its own section: Black runs only with a `[tool.black]` table in `pyproject.toml`. Otherwise every Python project would run Black after Ruff, at Black's own defaults, and the two formatters would fight over each file.
+
 ## Example workflow
 
 1. Edit a TypeScript file in Claude Code
